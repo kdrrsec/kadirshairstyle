@@ -119,42 +119,39 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="section section-alt" id="diensten">
+        <section className="section section-alt section-compact" id="diensten">
           <div className="container">
-            <p className="eyebrow center">Diensten</p>
-            <h2 className="center">Waar wij je mee kunnen helpen</h2>
-            <div className="cards cards-3">
+            <div className="services-head">
+              <div>
+                <p className="eyebrow">Diensten &amp; prijzen</p>
+                <h2>Waar wij je mee kunnen helpen</h2>
+              </div>
+              <Link href={BOOKING_HREF} className="btn btn-primary">
+                Maak afspraak
+              </Link>
+            </div>
+            <ul className="service-list">
               {treatments.map((t) => {
                 const Icon = ICONS[t.slug] ?? Scissors;
                 return (
-                  <div className="card" key={t.slug}>
-                    <span className="card-tag">{t.tag}</span>
-                    <div className="card-icon-line">
-                      <Icon strokeWidth={1.6} aria-hidden="true" />
-                    </div>
-                    <h3>{t.name}</h3>
-                    <p>{t.description}</p>
-                  </div>
+                  <li className="service-item" key={t.slug}>
+                    <Link href={`${BOOKING_HREF}?behandeling=${t.slug}`} className="service-item-link">
+                      <span className="service-item-icon">
+                        <Icon strokeWidth={1.5} aria-hidden="true" />
+                      </span>
+                      <span className="service-item-body">
+                        <h3>{t.name}</h3>
+                        <span className="service-item-desc">{t.description}</span>
+                        <span className="service-item-meta">
+                          {t.durationMinutes} min ·{' '}
+                          {t.priceFrom !== null ? `€${formatEuro(t.priceFrom)}` : 'prijs op aanvraag'}
+                        </span>
+                      </span>
+                    </Link>
+                  </li>
                 );
               })}
-            </div>
-
-            <div className="price-list">
-              <h3 className="price-list-title">Prijslijst</h3>
-              <p className="price-list-category">Behandelingen</p>
-              {treatments.map((t) => (
-                <div className="price-row" key={t.slug}>
-                  <span className="name">{t.name}</span>
-                  <span className="dots"></span>
-                  <span className="duration">{t.durationMinutes} min</span>
-                  {t.priceFrom !== null ? (
-                    <span className="price">€{formatEuro(t.priceFrom)}</span>
-                  ) : (
-                    <span className="price on-request">op aanvraag</span>
-                  )}
-                </div>
-              ))}
-            </div>
+            </ul>
           </div>
         </section>
 
