@@ -1,4 +1,4 @@
-import { images } from '@/content/images';
+import { heroImage } from '@/content/images';
 import { site, treatments, type DayKey } from '@/content/site';
 
 const SCHEMA_DAYS: Record<DayKey, string> = {
@@ -19,7 +19,7 @@ export function StructuredData() {
     '@id': `${site.url}/#salon`,
     name: site.name,
     url: site.url,
-    image: [images.hero.src],
+    image: [heroImage.src],
     description:
       "Moderne kapsalon in Zutphen voor knippen, kleuren, highlights, styling en haarverzorging, met persoonlijke aandacht.",
     address: {
@@ -35,7 +35,7 @@ export function StructuredData() {
     potentialAction: {
       '@type': 'ReserveAction',
       target: `${site.url}/afspraak`,
-      name: 'Reserveer jouw moment',
+      name: 'Maak afspraak',
     },
     hasOfferCatalog: {
       '@type': 'OfferCatalog',

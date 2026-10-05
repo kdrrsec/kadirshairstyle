@@ -1,27 +1,25 @@
 import type { Metadata, Viewport } from 'next';
-import { Instrument_Serif, Jost } from 'next/font/google';
-import { MotionProvider } from '@/components/ui/MotionProvider';
+import { Playfair_Display, Poppins } from 'next/font/google';
 import { site } from '@/content/site';
 import './globals.css';
 
-const display = Instrument_Serif({
+const playfair = Playfair_Display({
   subsets: ['latin'],
-  weight: '400',
-  style: ['normal', 'italic'],
-  variable: '--font-instrument-serif',
+  weight: ['500', '600', '700'],
+  variable: '--font-playfair',
   display: 'swap',
 });
 
-const sans = Jost({
+const poppins = Poppins({
   subsets: ['latin'],
-  weight: ['300', '400', '500'],
-  variable: '--font-jost',
+  weight: ['300', '400', '500', '600'],
+  variable: '--font-poppins',
   display: 'swap',
 });
 
-const title = "Kapper Zutphen | Kadir's Hairstyle – Kapsalon & haarstylist";
+const title = "Kadir's Hairstyle | Kapper & Kapsalon in Zutphen";
 const description =
-  "Kadir's Hairstyle is een moderne kapsalon in Zutphen voor knippen, kleuren, highlights, styling en haarverzorging. Persoonlijke aandacht en vakmanschap — reserveer jouw moment online.";
+  "Kadir's Hairstyle in Zutphen, kapsalon voor knippen, kleuren, highlights en styling. Maak vandaag nog online een afspraak.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -59,17 +57,15 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#faf7f2',
+  themeColor: '#f8f2e9',
   width: 'device-width',
   initialScale: 1,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="nl" className={`${display.variable} ${sans.variable}`}>
-      <body>
-        <MotionProvider>{children}</MotionProvider>
-      </body>
+    <html lang="nl" className={`${playfair.variable} ${poppins.variable}`}>
+      <body>{children}</body>
     </html>
   );
 }

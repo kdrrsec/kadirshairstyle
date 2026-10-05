@@ -13,22 +13,30 @@ export default function OpengraphImage() {
           height: '100%',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'space-between',
-          background: '#1c1b19',
-          color: '#f4efe7',
-          padding: '72px 80px',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: '#2b1a10',
+          color: '#f8f2e9',
           fontFamily: 'serif',
         }}
       >
-        <div style={{ display: 'flex', fontSize: 20, letterSpacing: 6, color: '#c8b495', fontFamily: 'sans-serif' }}>
-          KADIR&rsquo;S HAIRSTYLE · ZUTPHEN
+        <div style={{ display: 'flex', fontSize: 22, letterSpacing: 6, color: '#e0c28f', fontFamily: 'sans-serif' }}>
+          KAPSALON · ZUTPHEN
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', fontSize: 120, lineHeight: 1 }}>
-          <span>Jouw haar.</span>
-          <span style={{ fontStyle: 'italic', color: '#c8b495', paddingLeft: 140 }}>Jouw stijl.</span>
-        </div>
-        <div style={{ display: 'flex', fontSize: 24, color: 'rgba(244,239,231,0.7)', fontFamily: 'sans-serif' }}>
-          Kapsalon &amp; haarstylist in Zutphen — reserveer jouw moment
+        <div style={{ display: 'flex', fontSize: 92, marginTop: 28 }}>Welkom bij Kadir&rsquo;s Hairstyle</div>
+        <div
+          style={{
+            display: 'flex',
+            marginTop: 44,
+            padding: '16px 36px',
+            borderRadius: 8,
+            background: '#c89b5c',
+            color: '#2b1a10',
+            fontSize: 26,
+            fontFamily: 'sans-serif',
+          }}
+        >
+          Maak online een afspraak
         </div>
       </div>
     ),

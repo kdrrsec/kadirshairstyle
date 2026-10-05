@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Reserveer jouw moment',
+  title: 'Maak een afspraak',
   description:
     "Reserveer online je afspraak bij Kadir's Hairstyle in Zutphen. Kies je behandeling, dag en tijd — in een paar stappen geregeld.",
   alternates: { canonical: '/afspraak' },

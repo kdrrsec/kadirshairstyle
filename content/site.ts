@@ -57,10 +57,8 @@ export const dayLabels: Record<DayKey, string> = {
 };
 
 export const navItems = [
-  { label: 'Home', href: '/#top' },
   { label: 'Over ons', href: '/#over-ons' },
-  { label: 'Behandelingen', href: '/#behandelingen' },
-  { label: 'Onze looks', href: '/#looks' },
+  { label: 'Diensten', href: '/#diensten' },
   { label: 'Contact', href: '/#contact' },
 ] as const;
 
@@ -73,61 +71,58 @@ export const BOOKING_HREF = '/afspraak';
  * `durationMinutes` bepaalt hoe lang een tijdslot in de agenda wordt
  * vastgehouden — stem dit af met de salon.
  * `priceFrom` staat op null zolang prijzen niet bekend zijn; de website
- * toont dan "Prijs in overleg".
+ * toont dan "op aanvraag".
  */
 export const treatments = [
   {
     slug: 'knippen',
+    tag: 'Knippen',
     name: 'Knippen',
-    description: 'Een coupe die past bij je gezicht, je haar en je dagelijkse routine.',
+    description: 'Een knipbeurt op maat, helemaal afgestemd op jouw stijl.',
     durationMinutes: 30,
     priceFrom: null as number | null,
   },
   {
     slug: 'wassen-knippen',
+    tag: 'Combi',
     name: 'Wassen & knippen',
-    description: 'Ontspannen wassen, verzorgen en knippen — van begin tot eind in rust.',
+    description: 'Wassen, verzorgen en knippen in één ontspannen behandeling.',
     durationMinutes: 45,
     priceFrom: null as number | null,
   },
   {
     slug: 'styling-fohnen',
+    tag: 'Styling',
     name: 'Styling / föhnen',
-    description: 'Volume, glans en vorm. Voor elke dag, of voor dat ene moment.',
+    description: 'Föhnen en stylen voor volume, glans en een verzorgde look.',
     durationMinutes: 30,
     priceFrom: null as number | null,
   },
   {
     slug: 'kleuren',
+    tag: 'Kleur',
     name: 'Kleuren',
-    description: 'Een kleur die je huid laat stralen, afgestemd in een persoonlijk advies.',
+    description: 'Een kleur die bij je past, met persoonlijk advies vooraf.',
     durationMinutes: 90,
     priceFrom: null as number | null,
   },
   {
     slug: 'highlights',
+    tag: 'Kleur',
     name: 'Highlights',
-    description: 'Licht en diepte op precies de juiste plekken, natuurlijk of uitgesproken.',
+    description: 'Licht en diepte op de juiste plekken, natuurlijk of opvallend.',
     durationMinutes: 120,
     priceFrom: null as number | null,
   },
   {
     slug: 'haarverzorging',
+    tag: 'Verzorging',
     name: 'Haarverzorging',
-    description: 'Intensieve behandelingen voor gezond, sterk en zacht haar.',
+    description: 'Verzorgende behandelingen voor gezond, sterk en zacht haar.',
     durationMinutes: 30,
     priceFrom: null as number | null,
   },
 ];
-
-/**
- * Google Reviews. Plaats hier echte reviews (maximaal drie worden getoond).
- * Zolang deze lijst leeg is, toont de website placeholders.
- */
-export const reviews: { text: string; author: string; rating: number }[] = [];
-
-/** Link naar de Google-reviewpagina van de salon (bijv. via Google Bedrijfsprofiel). */
-export const googleReviewsUrl: string | null = null;
 
 export function fullAddress() {
   if (!site.address) return null;
