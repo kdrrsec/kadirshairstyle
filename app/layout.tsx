@@ -1,19 +1,20 @@
 import type { Metadata, Viewport } from 'next';
-import { Playfair_Display, Poppins } from 'next/font/google';
+import { Cormorant_Garamond, Jost } from 'next/font/google';
 import { site } from '@/content/site';
 import './globals.css';
 
-const playfair = Playfair_Display({
+const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
-  weight: ['500', '600', '700'],
-  variable: '--font-playfair',
+  weight: ['400', '500', '600'],
+  style: ['normal', 'italic'],
+  variable: '--font-cormorant',
   display: 'swap',
 });
 
-const poppins = Poppins({
+const jost = Jost({
   subsets: ['latin'],
-  weight: ['300', '400', '500', '600'],
-  variable: '--font-poppins',
+  weight: ['400', '500'],
+  variable: '--font-jost',
   display: 'swap',
 });
 
@@ -57,14 +58,14 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#f8f2e9',
+  themeColor: '#f5f2ec',
   width: 'device-width',
   initialScale: 1,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="nl" className={`${playfair.variable} ${poppins.variable}`}>
+    <html lang="nl" className={`${cormorant.variable} ${jost.variable}`}>
       <body>{children}</body>
     </html>
   );

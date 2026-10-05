@@ -62,7 +62,7 @@ export default function Home() {
           <div className="hero-content">
             <p className="eyebrow">Kapsalon · {site.city}</p>
             <h1>
-              Welkom bij {site.name}
+              Welkom bij <em>{site.name}</em>
               <span className="sr-only"> — kapper in {site.city}</span>
             </h1>
             <div className="hero-actions">

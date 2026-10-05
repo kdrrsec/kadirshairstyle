@@ -15,12 +15,12 @@ export default function OpengraphImage() {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          background: '#2b1a10',
-          color: '#f8f2e9',
+          background: '#1b1c1e',
+          color: '#f5f2ec',
           fontFamily: 'serif',
         }}
       >
-        <div style={{ display: 'flex', fontSize: 22, letterSpacing: 6, color: '#e0c28f', fontFamily: 'sans-serif' }}>
+        <div style={{ display: 'flex', fontSize: 22, letterSpacing: 6, color: '#cbb797', fontFamily: 'sans-serif' }}>
           KAPSALON · ZUTPHEN
         </div>
         <div style={{ display: 'flex', fontSize: 92, marginTop: 28 }}>Welkom bij Kadir&rsquo;s Hairstyle</div>
@@ -29,9 +29,9 @@ export default function OpengraphImage() {
             display: 'flex',
             marginTop: 44,
             padding: '16px 36px',
-            borderRadius: 8,
-            background: '#c89b5c',
-            color: '#2b1a10',
+            borderRadius: 2,
+            background: '#f5f2ec',
+            color: '#1b1c1e',
             fontSize: 26,
             fontFamily: 'sans-serif',
           }}
