@@ -119,34 +119,47 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="section section-alt section-compact" id="diensten">
+        <section className="section section-alt" id="diensten">
           <div className="container">
             <div className="services-head">
               <div>
                 <p className="eyebrow">Diensten &amp; prijzen</p>
                 <h2>Waar wij je mee kunnen helpen</h2>
+                <p className="services-intro">
+                  Van een frisse coupe tot kleur en verzorging. Kies je behandeling en boek direct online.
+                </p>
               </div>
               <Link href={BOOKING_HREF} className="btn btn-primary">
                 Maak afspraak
               </Link>
             </div>
-            <ul className="service-list">
-              {treatments.map((t) => {
+            <ul className="svc-grid">
+              {treatments.map((t, i) => {
                 const Icon = ICONS[t.slug] ?? Scissors;
                 return (
-                  <li className="service-item" key={t.slug}>
-                    <Link href={`${BOOKING_HREF}?behandeling=${t.slug}`} className="service-item-link">
-                      <span className="service-item-icon">
-                        <Icon strokeWidth={1.5} aria-hidden="true" />
-                      </span>
-                      <span className="service-item-body">
-                        <h3>{t.name}</h3>
-                        <span className="service-item-desc">{t.description}</span>
-                        <span className="service-item-meta">
-                          {t.durationMinutes} min ·{' '}
-                          {t.priceFrom !== null ? `€${formatEuro(t.priceFrom)}` : 'prijs op aanvraag'}
+                  <li key={t.slug}>
+                    <Link href={`${BOOKING_HREF}?behandeling=${t.slug}`} className="svc-card">
+                      <div className="svc-top">
+                        <span className="svc-icon">
+                          <Icon strokeWidth={1.5} aria-hidden="true" />
                         </span>
-                      </span>
+                        <span className="svc-num" aria-hidden="true">
+                          {String(i + 1).padStart(2, '0')}
+                        </span>
+                      </div>
+                      <div className="svc-body">
+                        <h3>{t.name}</h3>
+                        <span className="svc-desc">{t.description}</span>
+                        <span className="svc-foot">
+                          <span>
+                            {t.durationMinutes} min ·{' '}
+                            {t.priceFrom !== null ? `€${formatEuro(t.priceFrom)}` : 'prijs op aanvraag'}
+                          </span>
+                          <span className="svc-cta">
+                            Boek <span aria-hidden="true">→</span>
+                          </span>
+                        </span>
+                      </div>
                     </Link>
                   </li>
                 );
