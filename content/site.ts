@@ -17,8 +17,7 @@ export const site = {
   url: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.kadirshairstyle.nl',
 
   /** Bijv. { street: 'Voorbeeldstraat 1', postalCode: '7201 AA' } */
-  // Bron: openbare bedrijfsvermelding (Google/telefoonboek). Graag nog bevestigen met de salon.
-  address: { street: 'Ruys de Beerenbrouckstraat 136', postalCode: '7204 MN' } as { street: string; postalCode: string } | null,
+  address: { street: 'Troelstralaan 35', postalCode: '7204 LC' } as { street: string; postalCode: string } | null,
 
   /** Bijv. { display: '0575 123 456', href: '+31575123456' } */
   phone: null as { display: string; href: string } | null,
