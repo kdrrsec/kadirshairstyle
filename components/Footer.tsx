@@ -12,12 +12,15 @@ export function Footer() {
           &copy; {year} {site.name} {site.city}. Alle rechten voorbehouden.
         </p>
         <div className="socials">
-          {site.instagram ? (
+          {site.instagram && (
             <a href={site.instagram.url} target="_blank" rel="noopener noreferrer">
               Instagram
             </a>
-          ) : (
-            <span>Instagram volgt</span>
+          )}
+          {site.tiktok && (
+            <a href={site.tiktok.url} target="_blank" rel="noopener noreferrer">
+              TikTok
+            </a>
           )}
           <span>Website door AxaWeb</span>
         </div>

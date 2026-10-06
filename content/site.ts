@@ -25,6 +25,9 @@ export const site = {
   /** Bijv. { handle: '@kadirshairstyle', url: 'https://www.instagram.com/kadirshairstyle/' } */
   instagram: null as { handle: string; url: string } | null,
 
+  /** Bijv. { handle: '@kadirshairstyle', url: 'https://www.tiktok.com/@kadirshairstyle' } */
+  tiktok: null as { handle: string; url: string } | null,
+
   /**
    * Openingstijden. Worden zowel op de website getoond als gebruikt door het
    * reserveringssysteem om beschikbare tijden te berekenen.
@@ -123,6 +126,15 @@ export const treatments = [
     priceFrom: null as number | null,
   },
 ];
+
+/**
+ * Video's in de sectie "Bekijk ons werk". Plak hier de links van TikTok-video's
+ * of Instagram-reels/posts, bijvoorbeeld:
+ *   'https://www.tiktok.com/@kadirshairstyle/video/7300000000000000000'
+ *   'https://www.instagram.com/reel/C1AbCdEfGhI/'
+ * Zolang de lijst leeg is, toont de website nette placeholders.
+ */
+export const socialVideos: string[] = [];
 
 export function fullAddress() {
   if (!site.address) return null;

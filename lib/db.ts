@@ -3,11 +3,14 @@ import { treatments } from '@/content/site';
 
 const globalForPg = globalThis as unknown as { _pgPool?: Pool };
 
+/** Vercel/Neon zet DATABASE_URL; POSTGRES_URL wordt als terugval ondersteund. */
+const connectionString = process.env.DATABASE_URL || process.env.POSTGRES_URL;
+
 export function isDatabaseConfigured() {
-  return Boolean(process.env.DATABASE_URL);
+  return Boolean(connectionString);
 }
 
-export const pool = globalForPg._pgPool || new Pool({ connectionString: process.env.DATABASE_URL });
+export const pool = globalForPg._pgPool || new Pool({ connectionString, max: 5 });
 
 if (process.env.NODE_ENV !== 'production') {
   globalForPg._pgPool = pool;

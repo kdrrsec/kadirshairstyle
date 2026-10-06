@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Droplets, Leaf, Palette, Scissors, Sparkles, Wind, type LucideIcon } from 'lucide-react';
 import { Footer } from '@/components/Footer';
 import { Navbar } from '@/components/Navbar';
+import { SocialVideos } from '@/components/SocialVideos';
 import { StructuredData } from '@/components/StructuredData';
 import { heroImage } from '@/content/images';
 import { BOOKING_HREF, dayLabels, fullAddress, site, treatments, type DayKey } from '@/content/site';
@@ -161,6 +162,8 @@ export default function Home() {
             </ul>
           </div>
         </section>
+
+        <SocialVideos />
 
         <section className="section" id="contact">
           <div className="container split">

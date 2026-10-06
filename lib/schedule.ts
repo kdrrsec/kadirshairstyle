@@ -29,6 +29,18 @@ export function localToUTC(dateStr: string, timeStr: string) {
   return new Date(naiveUTC.getTime() - offset * 60000);
 }
 
+/** Datum (YYYY-MM-DD) en tijd (HH:MM) van een moment in Amsterdamse tijd. */
+export function toAmsterdamParts(d: Date) {
+  const date = new Intl.DateTimeFormat('en-CA', { timeZone: TIMEZONE }).format(d);
+  const time = new Intl.DateTimeFormat('nl-NL', {
+    timeZone: TIMEZONE,
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).format(d);
+  return { date, time };
+}
+
 export function weekdayForDate(dateStr: string) {
   const [y, m, d] = dateStr.split('-').map(Number);
   const probe = new Date(Date.UTC(y, m - 1, d, 12));

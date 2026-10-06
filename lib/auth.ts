@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 
 export const ADMIN_COOKIE_NAME = 'admin_session';
-export const SESSION_MAX_AGE_SECONDS = 60 * 60 * 8;
+export const SESSION_MAX_AGE_SECONDS = 60 * 60 * 24 * 30; // 30 dagen ingelogd blijven
 
 function sign(value: string) {
   const secret = process.env.ADMIN_PASSWORD;
