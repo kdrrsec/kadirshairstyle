@@ -69,9 +69,9 @@ export default function Home() {
               <Link href={BOOKING_HREF} className="btn btn-primary">
                 Maak afspraak
               </Link>
-              <Link href="/#diensten" className="btn btn-ghost">
+              <a href="#diensten" className="btn btn-ghost">
                 Bekijk diensten
-              </Link>
+              </a>
             </div>
           </div>
         </section>

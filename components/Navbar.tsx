@@ -26,9 +26,9 @@ export function Navbar() {
           <Brand onClick={close} priority />
           <nav className="nav-links" aria-label="Hoofdnavigatie">
             {navItems.map((item) => (
-              <Link key={item.href} href={item.href}>
+              <a key={item.href} href={item.href}>
                 {item.label}
-              </Link>
+              </a>
             ))}
           </nav>
           <div className="nav-right">
@@ -51,9 +51,9 @@ export function Navbar() {
 
         <nav className={`nav-mobile${open ? ' open' : ''}`} aria-label="Mobiele navigatie">
           {navItems.map((item) => (
-            <Link key={item.href} href={item.href} onClick={close}>
+            <a key={item.href} href={item.href} onClick={close}>
               {item.label}
-            </Link>
+            </a>
           ))}
           <Link href={BOOKING_HREF} className="btn btn-primary nav-mobile-cta" onClick={close}>
             Maak afspraak
