@@ -23,7 +23,7 @@ export function Navbar() {
     <>
       <header className="navbar" id="navbar">
         <div className="nav-inner">
-          <Brand onClick={close} />
+          <Brand onClick={close} priority />
           <nav className="nav-links" aria-label="Hoofdnavigatie">
             {navItems.map((item) => (
               <Link key={item.href} href={item.href}>

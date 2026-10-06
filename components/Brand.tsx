@@ -1,17 +1,28 @@
+import Image from 'next/image';
 import Link from 'next/link';
+import logoDark from '@/public/logo.png';
+import logoLight from '@/public/logo-light.png';
 
 type BrandProps = {
   className?: string;
   href?: string;
   onClick?: () => void;
+  /** 'light' voor donkere achtergronden (footer). */
+  tone?: 'dark' | 'light';
+  priority?: boolean;
 };
 
-/** Woordmerk van Kadir's Hairstyle (vervangt het logo zolang er geen logobestand is). */
-export function Brand({ className = 'brand', href = '/#top', onClick }: BrandProps) {
+/** Logo van Kadir's Hairstyle (transparante PNG, donkere en lichte variant). */
+export function Brand({ className = 'brand', href = '/#top', onClick, tone = 'dark', priority }: BrandProps) {
   return (
-    <Link href={href} className={`${className} brand-text`} onClick={onClick} aria-label="Kadir's Hairstyle">
-      <span className="brand-name">Kadir&rsquo;s</span>
-      <span className="brand-sub">Hairstyle</span>
+    <Link href={href} className={className} onClick={onClick} aria-label="Kadir's Hairstyle — naar de homepage">
+      <Image
+        src={tone === 'light' ? logoLight : logoDark}
+        alt="Kadir's Hairstyle Kapper"
+        className="brand-logo"
+        priority={priority}
+        sizes="(max-width: 720px) 100px, 160px"
+      />
     </Link>
   );
 }

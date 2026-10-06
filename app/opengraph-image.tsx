@@ -1,10 +1,15 @@
+import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import { ImageResponse } from 'next/og';
 
-export const alt = "Kadir's Hairstyle — kapsalon in Zutphen";
+export const alt = "Kadir's Hairstyle — kapper in Zutphen";
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
-export default function OpengraphImage() {
+export default async function OpengraphImage() {
+  const logo = await readFile(join(process.cwd(), 'public/logo-light.png'));
+  const logoSrc = `data:image/png;base64,${logo.toString('base64')}`;
+
   return new ImageResponse(
     (
       <div
@@ -17,26 +22,13 @@ export default function OpengraphImage() {
           justifyContent: 'center',
           background: '#1b1c1e',
           color: '#f5f2ec',
-          fontFamily: 'serif',
+          fontFamily: 'sans-serif',
         }}
       >
-        <div style={{ display: 'flex', fontSize: 22, letterSpacing: 6, color: '#cbb797', fontFamily: 'sans-serif' }}>
-          KAPSALON · ZUTPHEN
-        </div>
-        <div style={{ display: 'flex', fontSize: 92, marginTop: 28 }}>Welkom bij Kadir&rsquo;s Hairstyle</div>
-        <div
-          style={{
-            display: 'flex',
-            marginTop: 44,
-            padding: '16px 36px',
-            borderRadius: 2,
-            background: '#f5f2ec',
-            color: '#1b1c1e',
-            fontSize: 26,
-            fontFamily: 'sans-serif',
-          }}
-        >
-          Maak online een afspraak
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={logoSrc} width={562} height={281} alt="" />
+        <div style={{ display: 'flex', marginTop: 40, fontSize: 26, letterSpacing: 6, color: '#d6c4a6' }}>
+          KAPPER · ZUTPHEN · ONLINE AFSPRAAK MAKEN
         </div>
       </div>
     ),

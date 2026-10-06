@@ -7,7 +7,7 @@ export function Footer() {
   return (
     <footer className="footer">
       <div className="container footer-inner">
-        <Brand className="brand-footer" />
+        <Brand className="brand-footer" tone="light" />
         <p>
           &copy; {year} {site.name} {site.city}. Alle rechten voorbehouden.
         </p>

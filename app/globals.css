@@ -73,11 +73,6 @@ h2.center { text-align: center; max-width: 640px; margin-left: auto; margin-righ
   line-height: 0;
   justify-self: start;
 }
-.brand-logo {
-  height: 56px;
-  width: auto;
-  display: block;
-}
 
 .nav-links {
   display: flex;
@@ -364,14 +359,6 @@ h2.center { text-align: center; max-width: 640px; margin-left: auto; margin-righ
   align-items: center;
   line-height: 0;
 }
-.brand-footer-logo {
-  width: 60px;
-  height: 60px;
-  object-fit: contain;
-  background: var(--ivory);
-  border-radius: 50%;
-  padding: 6px;
-}
 .footer p { margin: 0; font-size: 0.85rem; }
 .socials { display: flex; gap: 20px; }
 .socials a { font-size: 0.85rem; font-weight: 500; }
@@ -391,21 +378,11 @@ h2.center { text-align: center; max-width: 640px; margin-left: auto; margin-righ
   .split-media { order: -1; max-width: 320px; margin: 0 auto; }
 }
 
-/* Woordmerk (zolang er geen logobestand is) */
-.brand-text { display: flex; flex-direction: column; line-height: 1; color: var(--ink); }
-.brand-text .brand-name { font-family: var(--font-head); font-size: 1.6rem; font-weight: 700; }
-.brand-text .brand-sub {
-  font-size: 0.6rem;
-  font-weight: 600;
-  letter-spacing: 0.34em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-top: 5px;
-}
-.footer .brand-text { color: var(--ivory); }
-.footer .brand-text .brand-sub { color: var(--champagne); }
-.booking-brand.brand-text { display: flex; flex-direction: column; line-height: 1; align-items: center; }
-.booking-brand.brand-text .brand-name { font-size: 2rem; }
+/* Logo */
+.brand-logo { display: block; height: 66px; width: auto; }
+.brand-footer .brand-logo { height: 64px; }
+.booking-brand { display: block; line-height: 0; }
+.booking-brand .brand-logo { height: 84px; margin: 0 auto; }
 
 .contact-actions { display: flex; gap: 14px; flex-wrap: wrap; }
 .pending { color: var(--text-soft); font-style: italic; }
@@ -430,7 +407,6 @@ h2.center { text-align: center; max-width: 640px; margin-left: auto; margin-righ
   margin-bottom: 32px;
   line-height: 0;
 }
-.booking-brand-logo { height: 64px; width: auto; }
 .booking-shell { width: 100%; max-width: 1040px; }
 
 .stepper {
@@ -662,7 +638,7 @@ h2.center { text-align: center; max-width: 640px; margin-left: auto; margin-righ
   .burger { display: flex; }
   .nav-links { display: none; }
   .nav-cta { display: none; }
-  .brand-text .brand-name { font-size: 1.35rem; }
+  .brand-logo { height: 52px; }
 
   .nav-mobile {
     display: flex;
