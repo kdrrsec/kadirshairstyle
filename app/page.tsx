@@ -107,8 +107,8 @@ export default function Home() {
               <p className="eyebrow">Over ons</p>
               <h2>Vakmanschap met een persoonlijke touch</h2>
               <p>
-                {site.name} is dé kapsalon in {site.city} voor wie een kapsel wil dat echt bij hem of haar past. Met
-                oog voor de laatste trends en persoonlijke aandacht zorgen wij voor een resultaat waarmee je met
+                {site.name} is dé herenkapper in {site.city} voor mannen die een kapsel willen dat echt bij hen past.
+                Met oog voor de laatste trends en persoonlijke aandacht zorgen wij voor een resultaat waarmee je met
                 vertrouwen de deur uitgaat, of je nu op zoek bent naar een frisse nieuwe look of een vertrouwde stijl.
               </p>
               <p>
