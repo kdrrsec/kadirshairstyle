@@ -18,7 +18,7 @@ export function Brand({ className = 'brand', href = '/#top', onClick, tone = 'da
     <Link href={href} className={className} onClick={onClick} aria-label="Kadir's Hairstyle — naar de homepage">
       <Image
         src={tone === 'light' ? logoLight : logoDark}
-        alt="Kadir's Hairstyle Kapper"
+        alt="Kadir's Hairstyle"
         className="brand-logo"
         priority={priority}
         sizes="(max-width: 720px) 100px, 160px"

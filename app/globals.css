@@ -379,10 +379,10 @@ h2.center { text-align: center; max-width: 640px; margin-left: auto; margin-righ
 }
 
 /* Logo */
-.brand-logo { display: block; height: 66px; width: auto; }
-.brand-footer .brand-logo { height: 64px; }
+.brand-logo { display: block; height: 54px; width: auto; }
+.brand-footer .brand-logo { height: 52px; }
 .booking-brand { display: block; line-height: 0; }
-.booking-brand .brand-logo { height: 84px; margin: 0 auto; }
+.booking-brand .brand-logo { height: 70px; margin: 0 auto; }
 
 .contact-actions { display: flex; gap: 14px; flex-wrap: wrap; }
 .pending { color: var(--text-soft); font-style: italic; }
@@ -638,7 +638,7 @@ h2.center { text-align: center; max-width: 640px; margin-left: auto; margin-righ
   .burger { display: flex; }
   .nav-links { display: none; }
   .nav-cta { display: none; }
-  .brand-logo { height: 52px; }
+  .brand-logo { height: 42px; }
 
   .nav-mobile {
     display: flex;
