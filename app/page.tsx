@@ -56,7 +56,7 @@ export default function Home() {
       <main id="top">
         <section className="hero">
           <div className="hero-bg" aria-hidden="true">
-            <Image src={heroImage.src} alt="" fill priority sizes="100vw" quality={70} />
+            <Image src={heroImage.src} alt="" fill priority sizes="100vw" quality={80} />
             <div className="hero-overlay"></div>
           </div>
           <div className="hero-content">

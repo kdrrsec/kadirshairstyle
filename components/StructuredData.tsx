@@ -19,7 +19,7 @@ export function StructuredData() {
     '@id': `${site.url}/#salon`,
     name: site.name,
     url: site.url,
-    image: [heroImage.src],
+    image: [`${site.url}${heroImage.src}`],
     description:
       "Moderne kapsalon in Zutphen voor knippen, kleuren, highlights, styling en haarverzorging, met persoonlijke aandacht.",
     address: {

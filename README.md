@@ -24,7 +24,7 @@ Alles wat nog niet bekend is staat in `content/site.ts` op `null`. De website to
 - **Openingstijden**: `site.hours`. Pas de tijden aan en zet `hoursConfirmed` op `true`. Het reserveringssysteem gebruikt deze tijden ook. Tot die tijd draait het op een tijdelijke standaard (di–vr 09:00–18:00, za 09:00–17:00).
 - **Behandelingen**: duur (`durationMinutes`) en prijs (`priceFrom`, nu `null` → "op aanvraag"). Wijzigingen worden bij de start van de server naar de database gesynchroniseerd.
 - **Logo**: `public/logo.png` (donker) en `public/logo-light.png` (licht), transparant. De favicon (`app/icon.png`) is de schaar uit het logo.
-- **Hero-foto**: in `content/images.ts` staat een tijdelijke Unsplash-foto. Vervang die door een eigen salonfoto (bijv. `/hero-kadirshairstyle.jpg` in `public/`).
+- **Hero-foto**: `public/hero-kadirshairstyle.jpg` (eigen salonfoto), ingesteld in `content/images.ts`.
 - **Domein**: zet `NEXT_PUBLIC_SITE_URL` (wordt gebruikt voor canonical, sitemap en Open Graph).
 
 ## Lokaal draaien
