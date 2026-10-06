@@ -119,47 +119,41 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="section section-alt" id="diensten">
-          <div className="container">
-            <div className="services-head">
-              <div>
-                <p className="eyebrow">Diensten &amp; prijzen</p>
-                <h2>Waar wij je mee kunnen helpen</h2>
-                <p className="services-intro">
-                  Van een frisse coupe tot kleur en verzorging. Kies je behandeling en boek direct online.
-                </p>
-              </div>
+        <section className="section menu-section" id="diensten">
+          <div className="container menu-layout">
+            <div className="menu-intro">
+              <p className="eyebrow">Diensten &amp; prijzen</p>
+              <h2>Waar wij je mee kunnen helpen</h2>
+              <p>
+                Van een frisse coupe tot kleur en verzorging. Kies je behandeling en plan direct online een moment
+                dat jou uitkomt.
+              </p>
               <Link href={BOOKING_HREF} className="btn btn-primary">
                 Maak afspraak
               </Link>
+              <p className="menu-note">Prijzen op aanvraag · persoonlijk advies in de salon</p>
             </div>
-            <ul className="svc-grid">
-              {treatments.map((t, i) => {
+
+            <ul className="menu-list">
+              {treatments.map((t) => {
                 const Icon = ICONS[t.slug] ?? Scissors;
                 return (
                   <li key={t.slug}>
-                    <Link href={`${BOOKING_HREF}?behandeling=${t.slug}`} className="svc-card">
-                      <div className="svc-top">
-                        <span className="svc-icon">
-                          <Icon strokeWidth={1.5} aria-hidden="true" />
-                        </span>
-                        <span className="svc-num" aria-hidden="true">
-                          {String(i + 1).padStart(2, '0')}
-                        </span>
-                      </div>
-                      <div className="svc-body">
+                    <Link href={`${BOOKING_HREF}?behandeling=${t.slug}`} className="menu-item">
+                      <span className="menu-icon">
+                        <Icon strokeWidth={1.5} aria-hidden="true" />
+                      </span>
+                      <div className="menu-text">
                         <h3>{t.name}</h3>
-                        <span className="svc-desc">{t.description}</span>
-                        <span className="svc-foot">
-                          <span>
-                            {t.durationMinutes} min ·{' '}
-                            {t.priceFrom !== null ? `€${formatEuro(t.priceFrom)}` : 'prijs op aanvraag'}
-                          </span>
-                          <span className="svc-cta">
-                            Boek <span aria-hidden="true">→</span>
-                          </span>
-                        </span>
+                        <p>{t.description}</p>
                       </div>
+                      <span className="menu-meta">
+                        <span className="menu-duration">{t.durationMinutes} min</span>
+                        {t.priceFrom !== null && <span className="menu-price">€{formatEuro(t.priceFrom)}</span>}
+                      </span>
+                      <span className="menu-arrow" aria-hidden="true">
+                        →
+                      </span>
                     </Link>
                   </li>
                 );
