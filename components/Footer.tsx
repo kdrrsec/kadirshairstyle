@@ -1,3 +1,5 @@
+import Image from 'next/image';
+import axawebIcon from '@/public/axaweb-icon.png';
 import { site } from '@/content/site';
 import { Brand } from './Brand';
 
@@ -22,7 +24,19 @@ export function Footer() {
               TikTok
             </a>
           )}
-          <span>Website door AxaWeb</span>
+          <span className="powered-by">
+            Powered by
+            <a
+              href="https://www.axaweb.nl"
+              target="_blank"
+              rel="noopener"
+              aria-label="AxaWeb (opent in nieuw tabblad)"
+              title="Website door AxaWeb"
+              className="powered-by-link"
+            >
+              <Image src={axawebIcon} alt="AxaWeb" width={22} height={22} />
+            </a>
+          </span>
         </div>
       </div>
     </footer>
