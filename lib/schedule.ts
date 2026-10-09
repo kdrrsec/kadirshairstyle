@@ -5,7 +5,7 @@ const TIMEZONE = 'Europe/Amsterdam';
 // 0 = zondag ... 6 = zaterdag
 const WEEKDAY_KEYS: DayKey[] = ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za'];
 
-const SLOT_STEP_MINUTES = 15;
+const SLOT_STEP_MINUTES = 30; // afspraken van 30 min, starttijden op het hele en halve uur
 const MIN_LEAD_MINUTES = 30;
 
 export type Interval = { start: Date; end: Date };

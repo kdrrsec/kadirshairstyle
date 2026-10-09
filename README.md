@@ -23,7 +23,7 @@ Alles wat nog niet bekend is staat in `content/site.ts` op `null`. De website to
 - **Instagram / TikTok**: `site.instagram` en `site.tiktok` (profiellinks)
 - **Video's**: plak links van TikTok-video's of Instagram-reels in `socialVideos` (in `content/site.ts`); ze verschijnen in de sectie "Bekijk ons werk"
 - **Openingstijden**: `site.hours`. Pas de tijden aan en zet `hoursConfirmed` op `true`. Het reserveringssysteem gebruikt deze tijden ook. Tot die tijd draait het op een tijdelijke standaard (di–vr 09:00–18:00, za 09:00–17:00).
-- **Behandelingen**: duur (`durationMinutes`) en prijs (`priceFrom`, nu `null` → "op aanvraag"). Wijzigingen worden bij de start van de server naar de database gesynchroniseerd.
+- **Behandelingen**: elke behandeling duurt 30 minuten (`durationMinutes`; tijdsloten per half uur). Prijs (`priceFrom`, nu `null` → "op aanvraag"). Wijzigingen worden bij de start van de server naar de database gesynchroniseerd.
 - **Logo**: `public/logo.png` (donker) en `public/logo-light.png` (licht), transparant. De favicon (`app/icon.png`) is de schaar uit het logo.
 - **Hero-foto**: `public/hero-kadirshairstyle.jpg` (eigen salonfoto), ingesteld in `content/images.ts`.
 - **Domein**: zet `NEXT_PUBLIC_SITE_URL` (wordt gebruikt voor canonical, sitemap en Open Graph).

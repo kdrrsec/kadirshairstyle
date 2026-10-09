@@ -90,7 +90,7 @@ export const treatments = [
     tag: 'Combi',
     name: 'Wassen & knippen',
     description: 'Wassen, verzorgen en knippen in één ontspannen behandeling.',
-    durationMinutes: 45,
+    durationMinutes: 30,
     priceFrom: null as number | null,
   },
   {
@@ -106,7 +106,7 @@ export const treatments = [
     tag: 'Kleur',
     name: 'Kleuren',
     description: 'Een kleur die bij je past, met persoonlijk advies vooraf.',
-    durationMinutes: 90,
+    durationMinutes: 30,
     priceFrom: null as number | null,
   },
   {
@@ -114,7 +114,7 @@ export const treatments = [
     tag: 'Kleur',
     name: 'Highlights',
     description: 'Licht en diepte op de juiste plekken, natuurlijk of opvallend.',
-    durationMinutes: 120,
+    durationMinutes: 30,
     priceFrom: null as number | null,
   },
   {
