@@ -1,4 +1,8 @@
 import type { Metadata } from 'next';
+import { Bebas_Neue } from 'next/font/google';
+
+// Strakke, hoge display-letter die past bij het stencil-logo; goed leesbaar op afstand.
+const tv = Bebas_Neue({ subsets: ['latin'], weight: '400', variable: '--font-tv', display: 'swap' });
 
 export const metadata: Metadata = {
   title: 'Wachtrij',
@@ -6,5 +10,5 @@ export const metadata: Metadata = {
 };
 
 export default function SchermLayout({ children }: { children: React.ReactNode }) {
-  return children;
+  return <div className={tv.variable}>{children}</div>;
 }
