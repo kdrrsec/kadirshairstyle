@@ -37,14 +37,14 @@ export const site = {
    * tijdelijke standaard voor het reserveringssysteem — pas ze aan naar de
    * echte openingstijden en zet `hoursConfirmed` op true.
    */
-  hoursConfirmed: false as boolean,
+  hoursConfirmed: true as boolean,
   hours: {
-    ma: null,
-    di: { open: '09:00', close: '18:00' },
-    wo: { open: '09:00', close: '18:00' },
-    do: { open: '09:00', close: '18:00' },
-    vr: { open: '09:00', close: '18:00' },
-    za: { open: '09:00', close: '17:00' },
+    ma: { open: '11:00', close: '16:00' },
+    di: { open: '10:00', close: '18:00' },
+    wo: { open: '10:00', close: '18:00' },
+    do: { open: '10:00', close: '18:00' },
+    vr: { open: '10:00', close: '20:00' },
+    za: { open: '10:00', close: '17:00' },
     zo: null,
   } as OpeningHours,
 };
