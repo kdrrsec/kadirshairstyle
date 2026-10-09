@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Footer } from '@/components/Footer';
@@ -141,7 +142,14 @@ export default function Home() {
                 {treatments.map((t) => (
                   <li key={t.slug} className="svc2-item">
                     <span className="svc2-name">
-                      {t.name}
+                      <span>
+                        {t.name.split('&').map((part, j) => (
+                          <Fragment key={j}>
+                            {j > 0 && <span className="amp">&amp;</span>}
+                            {part}
+                          </Fragment>
+                        ))}
+                      </span>
                       {t.priceFrom !== null && <span className="svc2-price">€{formatEuro(t.priceFrom)}</span>}
                     </span>
                     <span className="svc2-desc">{t.description}</span>
