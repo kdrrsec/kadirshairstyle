@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
 import { Footer } from '@/components/Footer';
 import { Navbar } from '@/components/Navbar';
 import { SocialVideos } from '@/components/SocialVideos';
@@ -139,23 +138,13 @@ export default function Home() {
               </p>
 
               <ol className="svc2-list">
-                {treatments.map((t, i) => (
-                  <li key={t.slug}>
-                    <Link href={`${BOOKING_HREF}?behandeling=${t.slug}`} className="svc2-item">
-                      <span className="svc2-num" aria-hidden="true">
-                        {String(i + 1).padStart(2, '0')}
-                      </span>
-                      <span className="svc2-text">
-                        <span className="svc2-name">
-                          {t.name}
-                          {t.priceFrom !== null && <span className="svc2-price">€{formatEuro(t.priceFrom)}</span>}
-                        </span>
-                        <span className="svc2-desc">{t.description}</span>
-                      </span>
-                      <span className="svc2-go" aria-hidden="true">
-                        <ArrowRight size={16} strokeWidth={1.8} />
-                      </span>
-                    </Link>
+                {treatments.map((t) => (
+                  <li key={t.slug} className="svc2-item">
+                    <span className="svc2-name">
+                      {t.name}
+                      {t.priceFrom !== null && <span className="svc2-price">€{formatEuro(t.priceFrom)}</span>}
+                    </span>
+                    <span className="svc2-desc">{t.description}</span>
                   </li>
                 ))}
               </ol>
