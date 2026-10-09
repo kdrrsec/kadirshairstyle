@@ -1,21 +1,12 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Droplets, Leaf, Palette, Scissors, Sparkles, Wind, type LucideIcon } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Footer } from '@/components/Footer';
 import { Navbar } from '@/components/Navbar';
 import { SocialVideos } from '@/components/SocialVideos';
 import { StructuredData } from '@/components/StructuredData';
 import { heroImage } from '@/content/images';
 import { BOOKING_HREF, dayLabels, fullAddress, site, treatments, type DayKey } from '@/content/site';
-
-const ICONS: Record<string, LucideIcon> = {
-  knippen: Scissors,
-  'wassen-knippen': Droplets,
-  'styling-fohnen': Wind,
-  kleuren: Palette,
-  highlights: Sparkles,
-  haarverzorging: Leaf,
-};
 
 const DAY_ORDER: DayKey[] = ['ma', 'di', 'wo', 'do', 'vr', 'za', 'zo'];
 
@@ -120,46 +111,56 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="section menu-section" id="diensten">
-          <div className="container menu-layout">
-            <div className="menu-intro">
-              <p className="eyebrow">Diensten &amp; prijzen</p>
-              <h2>Waar wij je mee kunnen helpen</h2>
-              <p>
-                Van een frisse coupe tot kleur en verzorging. Kies je behandeling en plan direct online een moment
-                dat jou uitkomt.
-              </p>
-              <Link href={BOOKING_HREF} className="btn btn-primary">
-                Maak afspraak
-              </Link>
-              <p className="menu-note">Prijzen op aanvraag · persoonlijk advies in de salon</p>
+        <section className="section section-alt" id="diensten">
+          <div className="container svc2">
+            <div className="svc2-media">
+              <Image
+                src={heroImage.src}
+                alt="Werkplek met ringlamp en kappersstoel bij Kadir's Hairstyle"
+                fill
+                sizes="(max-width: 900px) 100vw, 42vw"
+                quality={70}
+                className="svc2-photo"
+              />
+              <div className="svc2-card">
+                <p>Weet je wat je wilt?</p>
+                <Link href={BOOKING_HREF} className="btn btn-primary">
+                  Maak direct je afspraak
+                </Link>
+              </div>
             </div>
 
-            <ul className="menu-list">
-              {treatments.map((t) => {
-                const Icon = ICONS[t.slug] ?? Scissors;
-                return (
+            <div className="svc2-content">
+              <p className="eyebrow">Diensten</p>
+              <h2>Waar wij je mee kunnen helpen</h2>
+              <p className="svc2-intro">
+                Van een frisse coupe tot kleur en verzorging. Kies je behandeling en plan direct online een moment dat
+                jou uitkomt.
+              </p>
+
+              <ol className="svc2-list">
+                {treatments.map((t, i) => (
                   <li key={t.slug}>
-                    <Link href={`${BOOKING_HREF}?behandeling=${t.slug}`} className="menu-item">
-                      <span className="menu-icon">
-                        <Icon strokeWidth={1.5} aria-hidden="true" />
+                    <Link href={`${BOOKING_HREF}?behandeling=${t.slug}`} className="svc2-item">
+                      <span className="svc2-num" aria-hidden="true">
+                        {String(i + 1).padStart(2, '0')}
                       </span>
-                      <div className="menu-text">
-                        <h3>{t.name}</h3>
-                        <p>{t.description}</p>
-                      </div>
-                      <span className="menu-meta">
-                        <span className="menu-duration">{t.durationMinutes} min</span>
-                        {t.priceFrom !== null && <span className="menu-price">€{formatEuro(t.priceFrom)}</span>}
+                      <span className="svc2-text">
+                        <span className="svc2-name">
+                          {t.name}
+                          {t.priceFrom !== null && <span className="svc2-price">€{formatEuro(t.priceFrom)}</span>}
+                        </span>
+                        <span className="svc2-desc">{t.description}</span>
                       </span>
-                      <span className="menu-arrow" aria-hidden="true">
-                        →
+                      <span className="svc2-go" aria-hidden="true">
+                        <ArrowRight size={16} strokeWidth={1.8} />
                       </span>
                     </Link>
                   </li>
-                );
-              })}
-            </ul>
+                ))}
+              </ol>
+              <p className="svc2-note">Prijzen op aanvraag · persoonlijk advies in de salon</p>
+            </div>
           </div>
         </section>
 

@@ -216,7 +216,6 @@ export default function AfspraakPage() {
                     >
                       {treatmentId === t.id && <span className="service-check">✓</span>}
                       <span className="service-name">{t.name}</span>
-                      <span className="service-duration">{t.duration_minutes} min</span>
                       <span className="service-price">{formatPrice(t.price_from)}</span>
                     </button>
                   ))}
