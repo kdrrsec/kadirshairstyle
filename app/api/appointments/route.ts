@@ -1,7 +1,8 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, after } from 'next/server';
 import { pool, ensureSchema } from '@/lib/db';
 import { isBookableTime, localToUTC } from '@/lib/schedule';
 import { DATE_RE, TIME_RE, databaseUnavailable } from '@/lib/api';
+import { notifyBarber } from '@/lib/notify';
 
 export const dynamic = 'force-dynamic';
 
@@ -33,7 +34,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Vul alle verplichte velden in.' }, { status: 400 });
   }
 
-  const { rows: treatmentRows } = await pool.query('SELECT duration_minutes FROM treatments WHERE id = $1', [
+  const { rows: treatmentRows } = await pool.query('SELECT name, duration_minutes FROM treatments WHERE id = $1', [
     Number(treatmentId),
   ]);
   if (treatmentRows.length === 0) {
@@ -82,6 +83,10 @@ export async function POST(request: Request) {
       ]
     );
     await client.query('COMMIT');
+
+    after(() =>
+      notifyBarber({ name: name.trim(), phone: phone.trim(), treatment: treatmentRows[0].name, date, time })
+    );
 
     return NextResponse.json({ id: rows[0].id });
   } catch (err) {

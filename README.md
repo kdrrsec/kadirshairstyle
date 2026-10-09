@@ -47,6 +47,17 @@ Het scherm toont alleen tijd en voornaam, ververst elke 30 seconden en verbergt 
 Klik één keer voor volledig scherm. Ingelogd in het beheer kan het ook via de knop **TV-scherm**.
 `SCREEN_TOKEN` staat als omgevingsvariabele in Vercel; wijzig die om oude links ongeldig te maken.
 
+## WhatsApp-melding bij een nieuwe afspraak
+
+Bij elke online boeking krijgt de kapper een WhatsApp-bericht (naam, dienst, datum/tijd, telefoonnummer) via de gratis dienst CallMeBot.
+
+1. Sla op de telefoon van de kapper het actuele CallMeBot-nummer op als contact (staat op callmebot.com, zoek op "WhatsApp API").
+2. Stuur vanaf de WhatsApp van de kapper het bericht `I allow callmebot to send me messages` naar dat contact.
+3. Je krijgt een bericht terug met een **apikey**.
+4. Vercel → **Settings → Environment Variables**: zet `CALLMEBOT_PHONE` (bijv. `+31612345678`) en `CALLMEBOT_APIKEY`, en redeploy.
+
+Zonder deze variabelen gebeurt er niets. Lukt een melding een keer niet, dan gaat de boeking gewoon door.
+
 ## Lokaal draaien
 
 ```bash
