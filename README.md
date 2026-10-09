@@ -10,6 +10,7 @@ Gebouwd door AxaWeb met Next.js en TypeScript, in dezelfde opzet als de In2Hairs
 | `app/page.tsx` | De one-page website (zelfde opbouw als In2Hairstyle: hero, over ons, diensten + prijslijst, contact) |
 | `app/afspraak/` | Reserveren: Dienst → Tijd → Gegevens → Klaar (zelfde flow als In2Hairstyle) |
 | `app/admin/` | Beheer voor de kapper: inloggen, afspraken per dag bekijken, verzetten en verwijderen |
+| `app/scherm/` | TV-scherm voor in de salon: tijd + voornaam van de afspraken van vandaag |
 | `app/api/` | Behandelingen, beschikbaarheid, afspraken en beheer (Postgres) |
 | `content/site.ts` | **Alle bedrijfsgegevens, behandelingen en openingstijden** |
 | `content/images.ts` | **Hero-foto** |
@@ -38,6 +39,13 @@ Alles wat nog niet bekend is staat in `content/site.ts` op `null`. De website to
 
 In het beheer kan de kapper per dag alle afspraken zien (met telefoonnummer om te bellen),
 een afspraak **verzetten** (vrije tijden of zelf een tijd kiezen) en **verwijderen**.
+
+## TV-scherm in de salon
+
+Open op de TV (of een laptop/stick eraan): `https://<domein>/scherm?code=<SCREEN_TOKEN>`.
+Het scherm toont alleen tijd en voornaam, ververst elke 30 seconden en verbergt afspraken die geweest zijn.
+Klik één keer voor volledig scherm. Ingelogd in het beheer kan het ook via de knop **TV-scherm**.
+`SCREEN_TOKEN` staat als omgevingsvariabele in Vercel; wijzig die om oude links ongeldig te maken.
 
 ## Lokaal draaien
 

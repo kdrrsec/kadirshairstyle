@@ -1152,3 +1152,116 @@ h2.center { text-align: center; max-width: 640px; margin-left: auto; margin-righ
   .adm-dialog { max-width: none; border-radius: 16px 16px 0 0; padding: 22px 18px calc(22px + env(safe-area-inset-bottom)); }
   .adm-dialog-foot .btn { flex: 1; }
 }
+
+/* ============ TV-scherm in de salon (/scherm) ============ */
+.scr {
+  min-height: 100vh;
+  height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 3vh;
+  padding: 4vh 4vw;
+  background: var(--ink);
+  color: var(--ivory);
+  overflow: hidden;
+  cursor: none;
+}
+.scr-head { display: flex; align-items: center; justify-content: space-between; }
+.scr-logo { display: block; height: 9vh; width: auto; }
+.scr-clock { display: flex; flex-direction: column; align-items: flex-end; line-height: 1; }
+.scr-clock strong {
+  font-family: var(--font-body);
+  font-size: 9vh;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+.scr-clock span { margin-top: 1vh; font-size: 2.4vh; color: rgba(245,242,236,0.6); }
+
+.scr-body {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 4vw;
+  min-height: 0;
+}
+.scr-label {
+  margin: 0 0 2.5vh;
+  font-size: 2.2vh;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--champagne);
+}
+.scr-now {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 5vh 4vw;
+  border-radius: 2.5vh;
+  background: rgba(245,242,236,0.05);
+  border: 1px solid rgba(245,242,236,0.1);
+}
+.scr-now h1 {
+  margin: 0;
+  font-family: var(--font-head);
+  font-size: 16vh;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--ivory);
+  overflow-wrap: anywhere;
+}
+.scr-now h1.scr-welcome { font-size: 9vh; }
+.scr-now-time { margin: 3vh 0 0; font-size: 5vh; font-weight: 500; color: var(--champagne); font-variant-numeric: tabular-nums; }
+
+.scr-next { display: flex; flex-direction: column; min-height: 0; }
+.scr-next ol { list-style: none; margin: 0; padding: 0; border-top: 1px solid rgba(245,242,236,0.12); }
+.scr-next li {
+  display: grid;
+  grid-template-columns: 14vh 1fr;
+  align-items: baseline;
+  gap: 2vw;
+  padding: 2vh 0;
+  border-bottom: 1px solid rgba(245,242,236,0.12);
+}
+.scr-time { font-size: 4.6vh; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--champagne); }
+.scr-name {
+  font-family: var(--font-head);
+  font-size: 5.2vh;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.scr-empty { margin: 0; font-size: 3.4vh; color: rgba(245,242,236,0.5); }
+.scr-more { margin: 2vh 0 0; font-size: 2.6vh; color: rgba(245,242,236,0.55); }
+
+.scr-foot { position: relative; display: flex; align-items: center; gap: 2vw; }
+.scr-qr {
+  display: block;
+  width: 13vh;
+  height: 13vh;
+  padding: 1vh;
+  border-radius: 1.2vh;
+  background: var(--ivory);
+}
+.scr-qr svg { display: block; width: 100%; height: 100%; }
+.scr-foot div { display: flex; flex-direction: column; gap: 0.6vh; }
+.scr-foot strong { font-size: 3vh; font-weight: 600; }
+.scr-foot div span { font-size: 2.2vh; color: rgba(245,242,236,0.6); }
+.scr-hint {
+  margin-left: auto;
+  font-size: 1.8vh;
+  color: rgba(245,242,236,0.35);
+}
+
+.scr-message { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+.scr-message h1 { color: var(--ivory); font-size: 7vh; margin: 0 0 2vh; }
+.scr-message p { font-size: 2.8vh; color: rgba(245,242,236,0.65); max-width: 60vw; }
+
+/* Staand scherm of smal venster */
+@media (max-aspect-ratio: 1/1) {
+  .scr-body { grid-template-columns: 1fr; gap: 3vh; }
+  .scr-now h1 { font-size: 10vh; }
+  .scr-logo { height: 6vh; }
+  .scr-clock strong { font-size: 6vh; }
+}

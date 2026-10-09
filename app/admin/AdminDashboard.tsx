@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { CalendarClock, LogOut, Phone, RefreshCw, Trash2, X } from 'lucide-react';
+import { CalendarClock, LogOut, Monitor, Phone, RefreshCw, Trash2, X } from 'lucide-react';
 import logoLight from '@/public/logo-light.png';
 
 type Appointment = {
@@ -132,6 +132,10 @@ export function AdminDashboard() {
             <span className="adm-top-label">Beheer</span>
           </div>
           <div className="adm-top-actions">
+            <a href="/scherm" target="_blank" rel="noopener" className="adm-top-link" title="Wachtrij voor de TV in de salon">
+              <Monitor size={16} strokeWidth={1.7} aria-hidden="true" />
+              <span>TV-scherm</span>
+            </a>
             <a href="/" className="adm-top-link">
               Website
             </a>
