@@ -49,17 +49,20 @@ Klik één keer voor volledig scherm. Ingelogd in het beheer kan het ook via de 
 
 ## WhatsApp-berichten naar de kapper
 
-Via de gratis dienst CallMeBot krijgt de kapper:
+Via AxaWeb Meldingen (eigen WhatsApp-dienst op `meldingen.axaweb.nl`) krijgt de kapper:
 - bij elke online boeking een bericht met naam, dienst, datum/tijd en telefoonnummer;
 - elke ochtend (op open dagen, tussen 9 en 10 uur in de zomer, tussen 8 en 9 uur in de winter) een overzicht van alle afspraken van die dag.
 
 Het dagoverzicht is een Vercel Cron (`vercel.json`) op `/api/cron/dagoverzicht`, beveiligd met `CRON_SECRET`.
 In het beheer kan het met de knop **Dagoverzicht** ook direct (opnieuw) worden verstuurd.
 
-1. Sla op de telefoon van de kapper het actuele CallMeBot-nummer op als contact (staat op callmebot.com, zoek op "WhatsApp API").
-2. Stuur vanaf de WhatsApp van de kapper het bericht `I allow callmebot to send me messages` naar dat contact.
-3. Je krijgt een bericht terug met een **apikey**.
-4. Vercel → **Settings → Environment Variables**: zet `CALLMEBOT_PHONE` (bijv. `+31612345678`) en `CALLMEBOT_APIKEY`, en redeploy.
+1. Sla op de telefoon van de kapper het AxaWeb-afzendnummer op als contact.
+2. Stuur vanaf de WhatsApp van de kapper het bericht `START Kadirs Hairstyle` naar dat contact.
+3. Je krijgt binnen een paar seconden een bericht terug met een **apikey** en een testlink.
+4. Vercel → **Settings → Environment Variables**: zet `WHATSAPP_PHONE` (bijv. `31612345678`) en `WHATSAPP_APIKEY`, en redeploy.
+
+Sleutel kwijt? Stuur `SLEUTEL`. Nieuwe sleutel nodig? Stuur `NIEUWE SLEUTEL` (en pas `WHATSAPP_APIKEY` aan).
+(De oude CallMeBot-variabelen `CALLMEBOT_PHONE`/`CALLMEBOT_APIKEY` werken nog zolang `WHATSAPP_APIKEY` leeg is.)
 
 Zonder deze variabelen gebeurt er niets. Lukt een melding een keer niet, dan gaat de boeking gewoon door.
 

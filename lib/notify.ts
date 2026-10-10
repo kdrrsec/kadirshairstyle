@@ -1,16 +1,19 @@
 /**
- * WhatsApp-berichten naar de kapper via CallMeBot (gratis): een melding bij
- * elke nieuwe afspraak en elke ochtend het overzicht van de dag.
+ * WhatsApp-berichten naar de kapper: een melding bij elke nieuwe afspraak en
+ * elke ochtend het overzicht van de dag.
  *
- * Instellen: de kapper stuurt vanaf zijn eigen WhatsApp één keer
- * "I allow callmebot to send me messages" naar het CallMeBot-nummer
- * (zie callmebot.com) en krijgt een apikey terug. Zet daarna in Vercel:
- *   CALLMEBOT_PHONE  = zijn nummer met landcode, bijv. +31612345678
- *   CALLMEBOT_APIKEY = de ontvangen apikey
- * Zonder deze variabelen wordt er niets verstuurd.
+ * Verstuurd via AxaWeb Meldingen (https://meldingen.axaweb.nl). Instellen:
+ * de kapper stuurt vanaf zijn eigen WhatsApp één keer "START <naam>" naar het
+ * AxaWeb-afzendnummer en krijgt een apikey terug. Zet daarna in Vercel:
+ *   WHATSAPP_PHONE  = zijn nummer met landcode, bijv. 31612345678
+ *   WHATSAPP_APIKEY = de ontvangen apikey
+ * (Oude CallMeBot-instellingen CALLMEBOT_PHONE/CALLMEBOT_APIKEY werken nog als
+ * WHATSAPP_APIKEY leeg is.) Zonder deze variabelen wordt er niets verstuurd.
  *
  * Het dagoverzicht draait als Vercel Cron (zie vercel.json) op /api/cron/dagoverzicht.
  */
+
+const AXAWEB_URL = process.env.WHATSAPP_API_URL || 'https://meldingen.axaweb.nl/send';
 
 type NewAppointment = {
   name: string;
@@ -30,19 +33,47 @@ function longDate(date: string) {
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
-/** Stuurt een WhatsApp-bericht naar de kapper. Doet niets als CallMeBot niet is ingesteld. */
-export async function sendWhatsApp(text: string) {
-  const phone = process.env.CALLMEBOT_PHONE;
-  const apikey = process.env.CALLMEBOT_APIKEY;
-  if (!phone || !apikey) return false;
+/** Is er een WhatsApp-dienst ingesteld (AxaWeb Meldingen of CallMeBot)? */
+export function whatsappConfigured() {
+  return Boolean(
+    (process.env.WHATSAPP_PHONE && process.env.WHATSAPP_APIKEY) ||
+      (process.env.CALLMEBOT_PHONE && process.env.CALLMEBOT_APIKEY)
+  );
+}
 
+function buildRequest(text: string): [URL | string, RequestInit] | null {
+  const phone = process.env.WHATSAPP_PHONE;
+  const apikey = process.env.WHATSAPP_APIKEY;
+  if (phone && apikey) {
+    return [
+      AXAWEB_URL,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ to: phone, text, key: apikey }),
+      },
+    ];
+  }
+
+  // Terugval: CallMeBot
+  const cmbPhone = process.env.CALLMEBOT_PHONE;
+  const cmbKey = process.env.CALLMEBOT_APIKEY;
+  if (!cmbPhone || !cmbKey) return null;
   const url = new URL('https://api.callmebot.com/whatsapp.php');
-  url.searchParams.set('phone', phone);
+  url.searchParams.set('phone', cmbPhone);
   url.searchParams.set('text', text);
-  url.searchParams.set('apikey', apikey);
+  url.searchParams.set('apikey', cmbKey);
+  return [url, {}];
+}
+
+/** Stuurt een WhatsApp-bericht naar de kapper. Doet niets als WhatsApp niet is ingesteld. */
+export async function sendWhatsApp(text: string) {
+  const request = buildRequest(text);
+  if (!request) return false;
+  const [url, init] = request;
 
   try {
-    const res = await fetch(url, { signal: AbortSignal.timeout(15000), cache: 'no-store' });
+    const res = await fetch(url, { ...init, signal: AbortSignal.timeout(15000), cache: 'no-store' });
     if (!res.ok) {
       console.error('WhatsApp-bericht mislukt:', res.status, (await res.text()).slice(0, 200));
       return false;

@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { guardAdmin } from '@/lib/admin';
 import { sendDailyOverview } from '@/lib/overview';
+import { whatsappConfigured } from '@/lib/notify';
 
 export const dynamic = 'force-dynamic';
 
@@ -9,7 +10,7 @@ export async function POST(request: NextRequest) {
   const denied = guardAdmin(request);
   if (denied) return denied;
 
-  if (!process.env.CALLMEBOT_PHONE || !process.env.CALLMEBOT_APIKEY) {
+  if (!whatsappConfigured()) {
     return NextResponse.json({ error: 'WhatsApp is nog niet ingesteld.' }, { status: 503 });
   }
   const result = await sendDailyOverview();
