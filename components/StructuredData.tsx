@@ -20,6 +20,8 @@ export function StructuredData() {
     name: site.name,
     url: site.url,
     image: [`${site.url}${heroImage.src}`],
+    logo: `${site.url}/logo.png`,
+    slogan: 'Service - Quality - Good vibes',
     description:
       "Moderne kapsalon in Zutphen voor knippen, kleuren, highlights, styling en haarverzorging, met persoonlijke aandacht.",
     address: {

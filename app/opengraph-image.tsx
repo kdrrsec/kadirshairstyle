@@ -26,8 +26,8 @@ export default async function OpengraphImage() {
         }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={logoSrc} width={640} height={221} alt="" />
-        <div style={{ display: 'flex', marginTop: 40, fontSize: 26, letterSpacing: 6, color: '#d6c4a6' }}>
+        <img src={logoSrc} width={820} height={165} alt="" />
+        <div style={{ display: 'flex', marginTop: 56, fontSize: 26, letterSpacing: 6, color: '#d6c4a6' }}>
           KAPPER · ZUTPHEN · ONLINE AFSPRAAK MAKEN
         </div>
       </div>

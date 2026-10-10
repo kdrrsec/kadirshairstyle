@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { CalendarClock, LogOut, MessageCircle, Monitor, Phone, RefreshCw, Trash2, X } from 'lucide-react';
-import logoLight from '@/public/logo-light.png';
+import logoLight from '@/public/logo-compact-light.png';
 
 type Appointment = {
   id: number;

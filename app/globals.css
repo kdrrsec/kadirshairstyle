@@ -481,10 +481,10 @@ h2.center { text-align: center; max-width: 640px; margin-left: auto; margin-righ
 }
 
 /* Logo */
-.brand-logo { display: block; height: 54px; width: auto; }
-.brand-footer .brand-logo { height: 52px; }
+.brand-logo { display: block; width: 230px; height: auto; }
+.brand-footer .brand-logo { width: 280px; }
 .booking-brand { display: block; line-height: 0; }
-.booking-brand .brand-logo { height: 70px; margin: 0 auto; }
+.booking-brand .brand-logo { width: 340px; max-width: 100%; margin: 0 auto; }
 
 .contact-actions { display: flex; gap: 14px; flex-wrap: wrap; }
 .pending { color: var(--text-soft); font-style: italic; }
@@ -730,7 +730,9 @@ h2.center { text-align: center; max-width: 640px; margin-left: auto; margin-righ
   .burger { display: flex; }
   .nav-links { display: none; }
   .nav-cta { display: none; }
-  .brand-logo { height: 42px; }
+  .brand-logo { width: 180px; }
+  .brand-footer .brand-logo { width: 240px; }
+  .booking-brand .brand-logo { width: 260px; }
 
   .nav-mobile {
     display: flex;
@@ -799,7 +801,7 @@ h2.center { text-align: center; max-width: 640px; margin-left: auto; margin-righ
   z-index: 1;
   color: var(--ivory);
 }
-.adm-login-logo { display: block; width: 220px; height: auto; }
+.adm-login-logo { display: block; width: 300px; max-width: 100%; height: auto; }
 .adm-login-visual-inner p {
   margin: 14px 0 0;
   font-size: 0.78rem;
@@ -847,7 +849,7 @@ h2.center { text-align: center; max-width: 640px; margin-left: auto; margin-righ
   gap: 16px;
 }
 .adm-top-brand { display: flex; align-items: center; gap: 14px; }
-.adm-top-logo { display: block; height: 36px; width: auto; }
+.adm-top-logo { display: block; width: 170px; height: auto; }
 .adm-top-label {
   padding-left: 14px;
   border-left: 1px solid rgba(245,242,236,0.2);
@@ -1101,13 +1103,13 @@ h2.center { text-align: center; max-width: 640px; margin-left: auto; margin-righ
 @media (max-width: 860px) {
   .adm-login { grid-template-columns: 1fr; grid-template-rows: 220px 1fr; }
   .adm-login-visual-inner { left: 24px; bottom: 24px; }
-  .adm-login-logo { width: 160px; }
+  .adm-login-logo { width: 220px; }
   .adm-login-panel { align-items: flex-start; padding-top: 36px; }
 }
 
 @media (max-width: 640px) {
   .adm-top-inner { padding: 10px 16px; }
-  .adm-top-logo { height: 30px; }
+  .adm-top-logo { width: 130px; }
   .adm-top-label { display: none; }
   .adm-top-link span { display: none; }
   .adm-main { padding: 24px 16px 72px; }
@@ -1139,7 +1141,7 @@ h2.center { text-align: center; max-width: 640px; margin-left: auto; margin-righ
   cursor: none;
 }
 .scr-head { display: flex; align-items: center; justify-content: space-between; }
-.scr-logo { display: block; height: 9vh; width: auto; }
+.scr-logo { display: block; height: 10vh; width: auto; }
 .scr-clock { display: flex; flex-direction: column; align-items: flex-end; line-height: 1; }
 .scr-clock strong {
   font-family: var(--font-tv), Impact, sans-serif;
