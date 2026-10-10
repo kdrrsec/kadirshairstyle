@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { CalendarClock, LogOut, Monitor, Phone, RefreshCw, Trash2, X } from 'lucide-react';
+import { CalendarClock, LogOut, MessageCircle, Monitor, Phone, RefreshCw, Trash2, X } from 'lucide-react';
 import logoLight from '@/public/logo-light.png';
 
 type Appointment = {
@@ -118,6 +118,21 @@ export function AdminDashboard() {
     if (d < stripStart || d > addDays(stripStart, STRIP_DAYS - 1)) setStripStart(d);
   }
 
+  const [sendingOverview, setSendingOverview] = useState(false);
+
+  async function sendOverview() {
+    setSendingOverview(true);
+    try {
+      const res = await fetch('/api/admin/dagoverzicht', { method: 'POST' });
+      const data = await res.json().catch(() => ({}));
+      setToast(res.ok ? 'Dagoverzicht verstuurd via WhatsApp' : data.error || 'Versturen is niet gelukt');
+    } catch {
+      setToast('Versturen is niet gelukt');
+    } finally {
+      setSendingOverview(false);
+    }
+  }
+
   async function logout() {
     await fetch('/api/admin/logout', { method: 'POST' });
     router.refresh();
@@ -136,6 +151,16 @@ export function AdminDashboard() {
               <Monitor size={16} strokeWidth={1.7} aria-hidden="true" />
               <span>TV-scherm</span>
             </a>
+            <button
+              type="button"
+              className="adm-top-link"
+              onClick={sendOverview}
+              disabled={sendingOverview}
+              title="Stuur het overzicht van vandaag via WhatsApp"
+            >
+              <MessageCircle size={16} strokeWidth={1.7} aria-hidden="true" />
+              <span>{sendingOverview ? 'Versturen…' : 'Dagoverzicht'}</span>
+            </button>
             <a href="/" className="adm-top-link">
               Website
             </a>

@@ -54,6 +54,7 @@ Via de gratis dienst CallMeBot krijgt de kapper:
 - elke ochtend (op open dagen, tussen 9 en 10 uur in de zomer, tussen 8 en 9 uur in de winter) een overzicht van alle afspraken van die dag.
 
 Het dagoverzicht is een Vercel Cron (`vercel.json`) op `/api/cron/dagoverzicht`, beveiligd met `CRON_SECRET`.
+In het beheer kan het met de knop **Dagoverzicht** ook direct (opnieuw) worden verstuurd.
 
 1. Sla op de telefoon van de kapper het actuele CallMeBot-nummer op als contact (staat op callmebot.com, zoek op "WhatsApp API").
 2. Stuur vanaf de WhatsApp van de kapper het bericht `I allow callmebot to send me messages` naar dat contact.
