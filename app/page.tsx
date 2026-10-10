@@ -156,7 +156,6 @@ export default function Home() {
                   </li>
                 ))}
               </ol>
-              <p className="svc2-note">Prijzen op aanvraag · persoonlijk advies in de salon</p>
             </div>
           </div>
         </section>
