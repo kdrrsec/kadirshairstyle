@@ -49,6 +49,19 @@ export function ensureSchema() {
           end_time TIMESTAMPTZ NOT NULL,
           reason TEXT
         );
+
+        -- Anti-spam: genormaliseerd nummer en IP-hash per afspraak, en losse boekpogingen.
+        ALTER TABLE appointments ADD COLUMN IF NOT EXISTS phone_e164 TEXT;
+        ALTER TABLE appointments ADD COLUMN IF NOT EXISTS ip_hash TEXT;
+        CREATE INDEX IF NOT EXISTS appointments_phone_e164_idx ON appointments (phone_e164);
+        CREATE INDEX IF NOT EXISTS appointments_ip_hash_idx ON appointments (ip_hash, created_at);
+
+        CREATE TABLE IF NOT EXISTS booking_attempts (
+          id SERIAL PRIMARY KEY,
+          ip_hash TEXT NOT NULL,
+          created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+        );
+        CREATE INDEX IF NOT EXISTS booking_attempts_ip_idx ON booking_attempts (ip_hash, created_at);
       `);
 
       // Behandelingen uit content/site.ts synchroniseren (naam, duur, prijs, volgorde).

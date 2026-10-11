@@ -3,6 +3,8 @@ import { pool, ensureSchema } from '@/lib/db';
 import { isBookableTime, localToUTC } from '@/lib/schedule';
 import { DATE_RE, TIME_RE, databaseUnavailable } from '@/lib/api';
 import { notifyBarber } from '@/lib/notify';
+import { normalizePhone } from '@/lib/phone';
+import { LIMITS, clientIp, hashIp, tooManyAttempts } from '@/lib/antispam';
 
 export const dynamic = 'force-dynamic';
 
@@ -16,7 +18,20 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Ongeldige aanvraag' }, { status: 400 });
   }
 
-  const { treatmentId, date, time, name, phone, email } = body as Record<string, unknown>;
+  const { treatmentId, date, time, name, phone, email, website, elapsedMs } = body as Record<string, unknown>;
+
+  // Anti-spam: verborgen veld (alleen bots vullen het in) en te snel ingevuld formulier.
+  if ((typeof website === 'string' && website.trim()) || typeof elapsedMs !== 'number' || elapsedMs < LIMITS.minFillMs) {
+    return NextResponse.json({ error: 'Je aanvraag kon niet worden verwerkt. Probeer het opnieuw.' }, { status: 400 });
+  }
+
+  const ipHash = hashIp(clientIp(request));
+  if (await tooManyAttempts(ipHash)) {
+    return NextResponse.json(
+      { error: 'Te veel pogingen achter elkaar. Probeer het over een paar minuten opnieuw.' },
+      { status: 429 }
+    );
+  }
 
   if (
     !treatmentId ||
@@ -32,6 +47,16 @@ export async function POST(request: Request) {
     phone.length > 40
   ) {
     return NextResponse.json({ error: 'Vul alle verplichte velden in.' }, { status: 400 });
+  }
+
+  const cleanName = name.trim().replace(/\s+/g, ' ');
+  if (cleanName.length < 2 || !/\p{L}/u.test(cleanName) || /https?:|www\.|[<>]/i.test(cleanName)) {
+    return NextResponse.json({ error: 'Vul je naam in.' }, { status: 400 });
+  }
+
+  const phoneCheck = normalizePhone(phone);
+  if (!phoneCheck.ok) {
+    return NextResponse.json({ error: phoneCheck.error }, { status: 400 });
   }
 
   const { rows: treatmentRows } = await pool.query('SELECT name, duration_minutes FROM treatments WHERE id = $1', [
@@ -62,6 +87,32 @@ export async function POST(request: Request) {
        WHERE start_time < $2 AND end_time > $1`,
       [start.toISOString(), end.toISOString()]
     );
+    // Niet te veel openstaande afspraken op één nummer, en niet te veel boekingen vanaf één IP.
+    const { rows: limits } = await client.query(
+      `SELECT
+         (SELECT count(*)::int FROM appointments
+          WHERE phone_e164 = $1 AND status != 'cancelled' AND end_time > now()) AS upcoming,
+         (SELECT count(*)::int FROM appointments
+          WHERE ip_hash = $2 AND created_at > now() - interval '1 day') AS today`,
+      [phoneCheck.e164, ipHash]
+    );
+    if (limits[0].upcoming >= LIMITS.upcomingPerPhone) {
+      await client.query('ROLLBACK');
+      return NextResponse.json(
+        {
+          error: `Op dit telefoonnummer staan al ${limits[0].upcoming} afspraken. Wil je iets wijzigen of nog een afspraak maken? Neem dan contact op met de salon.`,
+        },
+        { status: 429 }
+      );
+    }
+    if (limits[0].today >= LIMITS.bookingsPerIpPerDay) {
+      await client.query('ROLLBACK');
+      return NextResponse.json(
+        { error: 'Je hebt vandaag al meerdere afspraken gemaakt. Neem contact op met de salon voor nog een afspraak.' },
+        { status: 429 }
+      );
+    }
+
     if (conflicts.length > 0) {
       await client.query('ROLLBACK');
       return NextResponse.json(
@@ -71,21 +122,24 @@ export async function POST(request: Request) {
     }
 
     const { rows } = await client.query(
-      `INSERT INTO appointments (treatment_id, customer_name, customer_phone, customer_email, start_time, end_time)
-       VALUES ($1,$2,$3,$4,$5,$6) RETURNING id`,
+      `INSERT INTO appointments
+         (treatment_id, customer_name, customer_phone, customer_email, start_time, end_time, phone_e164, ip_hash)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id`,
       [
         Number(treatmentId),
-        name.trim(),
-        phone.trim(),
+        cleanName,
+        phoneCheck.display,
         typeof email === 'string' && email.trim() ? email.trim() : null,
         start.toISOString(),
         end.toISOString(),
+        phoneCheck.e164,
+        ipHash,
       ]
     );
     await client.query('COMMIT');
 
     after(() =>
-      notifyBarber({ name: name.trim(), phone: phone.trim(), treatment: treatmentRows[0].name, date, time })
+      notifyBarber({ name: cleanName, phone: phoneCheck.display, treatment: treatmentRows[0].name, date, time })
     );
 
     return NextResponse.json({ id: rows[0].id });

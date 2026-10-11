@@ -29,6 +29,16 @@ Alles wat nog niet bekend is staat in `content/site.ts` op `null`. De website to
 - **Hero-foto**: `public/hero-kadirshairstyle.jpg` (eigen salonfoto), ingesteld in `content/images.ts`.
 - **Domein**: zet `NEXT_PUBLIC_SITE_URL` (wordt gebruikt voor canonical, sitemap en Open Graph).
 
+## Bescherming tegen spam bij online boeken
+
+- **Telefoonnummer wordt gecontroleerd** (libphonenumber): het nummer moet echt kunnen bestaan. 0800/0900-nummers en duidelijk verzonnen nummers (06 12345678, 06 00000000) worden geweigerd. Buitenlandse nummers kunnen met +landcode. Het nummer wordt netjes opgeslagen (bijv. `06 19201856`).
+- **Maximaal 2 openstaande afspraken per telefoonnummer.**
+- **Maximaal 3 boekingen per dag vanaf hetzelfde internetadres**, en maximaal 8 pogingen per 10 minuten.
+- **Bots worden tegengehouden** met een onzichtbaar veld en een minimale invultijd.
+- IP-adressen worden niet opgeslagen, alleen een onomkeerbare hash (AVG-vriendelijk).
+
+De grenzen staan in `lib/antispam.ts` (`LIMITS`).
+
 ## Database en beheer instellen (Vercel)
 
 1. Vercel → project **kadirshairstyle** → **Storage** → **Create Database** → **Neon (Postgres)** → koppel aan het project.

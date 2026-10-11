@@ -482,6 +482,7 @@ h2.center { text-align: center; max-width: 640px; margin-left: auto; margin-righ
 .pending { color: var(--text-soft); font-style: italic; }
 .map-frame { background: var(--ivory-dark); }
 .day-circle.closed { opacity: 0.45; }
+.hp-field { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
 .sr-only {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
   overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;

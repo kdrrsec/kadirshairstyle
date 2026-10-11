@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
+import { isValidPhoneNumber } from 'libphonenumber-js/min';
 import { Brand } from '@/components/Brand';
 import { site, type DayKey } from '@/content/site';
 
@@ -97,6 +98,8 @@ export default function AfspraakPage() {
 
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [website, setWebsite] = useState(''); // verborgen anti-spamveld
+  const detailsShownAt = useRef(0);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [confirmed, setConfirmed] = useState<{ date: string; time: string; treatment?: Treatment } | null>(null);
@@ -127,6 +130,10 @@ export default function AfspraakPage() {
       .finally(() => setLoadingSlots(false));
   }, [step, treatmentId, selectedDate]);
 
+  useEffect(() => {
+    if (step === 'details') detailsShownAt.current = Date.now();
+  }, [step]);
+
   const selectedTreatment = treatments.find((t) => t.id === treatmentId);
   const maxStepIndex = confirmed ? 3 : time ? 2 : treatmentId ? 1 : 0;
 
@@ -142,12 +149,24 @@ export default function AfspraakPage() {
       setError('Vul je naam en telefoonnummer in.');
       return;
     }
+    if (!isValidPhoneNumber(phone.trim(), 'NL')) {
+      setError('Vul een geldig telefoonnummer in, bijvoorbeeld je 06-nummer.');
+      return;
+    }
     setSubmitting(true);
     try {
       const res = await fetch('/api/appointments', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ treatmentId, date: selectedDate, time, name, phone }),
+        body: JSON.stringify({
+          treatmentId,
+          date: selectedDate,
+          time,
+          name,
+          phone,
+          website,
+          elapsedMs: Date.now() - detailsShownAt.current,
+        }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
@@ -311,6 +330,17 @@ export default function AfspraakPage() {
                       autoComplete="tel"
                       maxLength={40}
                       required
+                    />
+                  </label>
+                  {/* Verborgen veld: mensen zien het niet, spambots vullen het in. */}
+                  <label className="hp-field" aria-hidden="true">
+                    <span>Website</span>
+                    <input
+                      value={website}
+                      onChange={(e) => setWebsite(e.target.value)}
+                      tabIndex={-1}
+                      autoComplete="off"
+                      name="website"
                     />
                   </label>
                   {error && <p className="form-error">{error}</p>}
