@@ -5,6 +5,7 @@ import { DATE_RE, TIME_RE, databaseUnavailable } from '@/lib/api';
 import { notifyBarber } from '@/lib/notify';
 import { normalizePhone } from '@/lib/phone';
 import { LIMITS, clientIp, hashIp, tooManyAttempts } from '@/lib/antispam';
+import { verifyTurnstile } from '@/lib/turnstile';
 
 export const dynamic = 'force-dynamic';
 
@@ -18,18 +19,29 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Ongeldige aanvraag' }, { status: 400 });
   }
 
-  const { treatmentId, date, time, name, phone, email, website, elapsedMs } = body as Record<string, unknown>;
+  const { treatmentId, date, time, name, phone, email, website, elapsedMs, turnstileToken } = body as Record<
+    string,
+    unknown
+  >;
 
   // Anti-spam: verborgen veld (alleen bots vullen het in) en te snel ingevuld formulier.
   if ((typeof website === 'string' && website.trim()) || typeof elapsedMs !== 'number' || elapsedMs < LIMITS.minFillMs) {
     return NextResponse.json({ error: 'Je aanvraag kon niet worden verwerkt. Probeer het opnieuw.' }, { status: 400 });
   }
 
-  const ipHash = hashIp(clientIp(request));
+  const ip = clientIp(request);
+  const ipHash = hashIp(ip);
   if (await tooManyAttempts(ipHash)) {
     return NextResponse.json(
       { error: 'Te veel pogingen achter elkaar. Probeer het over een paar minuten opnieuw.' },
       { status: 429 }
+    );
+  }
+
+  if (!(await verifyTurnstile(turnstileToken, ip))) {
+    return NextResponse.json(
+      { error: 'Bevestig eerst dat je geen robot bent (het vinkje boven de knop).', code: 'turnstile' },
+      { status: 400 }
     );
   }
 

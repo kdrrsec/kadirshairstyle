@@ -37,6 +37,8 @@ Alles wat nog niet bekend is staat in `content/site.ts` op `null`. De website to
 - **Bots worden tegengehouden** met een onzichtbaar veld en een minimale invultijd.
 - IP-adressen worden niet opgeslagen, alleen een onomkeerbare hash (AVG-vriendelijk).
 
+- **Cloudflare Turnstile** ("ik ben een mens"-vinkje), gratis. Aanzetten: maak op dash.cloudflare.com → Turnstile een widget (modus *Managed*, hostnames van de site) en zet `NEXT_PUBLIC_TURNSTILE_SITE_KEY` en `TURNSTILE_SECRET_KEY` in Vercel, daarna redeployen. Zonder sleutels staat het vinkje uit. Is Cloudflare zelf onbereikbaar, dan gaan boekingen gewoon door (de andere regels blijven gelden).
+
 De grenzen staan in `lib/antispam.ts` (`LIMITS`).
 
 ## Database en beheer instellen (Vercel)

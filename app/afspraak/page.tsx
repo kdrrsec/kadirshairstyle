@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useEffect, useMemo, useState, useRef } from 'react';
 import { isValidPhoneNumber } from 'libphonenumber-js/min';
 import { Brand } from '@/components/Brand';
+import { Turnstile } from '@/components/Turnstile';
 import { site, type DayKey } from '@/content/site';
 
 type Treatment = {
@@ -100,6 +101,9 @@ export default function AfspraakPage() {
   const [phone, setPhone] = useState('');
   const [website, setWebsite] = useState(''); // verborgen anti-spamveld
   const detailsShownAt = useRef(0);
+  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+  const [turnstileToken, setTurnstileToken] = useState('');
+  const [turnstileReset, setTurnstileReset] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [confirmed, setConfirmed] = useState<{ date: string; time: string; treatment?: Treatment } | null>(null);
@@ -153,6 +157,10 @@ export default function AfspraakPage() {
       setError('Vul een geldig telefoonnummer in, bijvoorbeeld je 06-nummer.');
       return;
     }
+    if (turnstileSiteKey && !turnstileToken) {
+      setError('Bevestig eerst dat je geen robot bent (het vinkje boven de knop).');
+      return;
+    }
     setSubmitting(true);
     try {
       const res = await fetch('/api/appointments', {
@@ -166,11 +174,14 @@ export default function AfspraakPage() {
           phone,
           website,
           elapsedMs: Date.now() - detailsShownAt.current,
+          turnstileToken,
         }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
         setError(data.error || 'Er ging iets mis. Probeer het opnieuw.');
+        // Een Turnstile-token is maar één keer geldig: vinkje opnieuw laten zetten.
+        if (turnstileSiteKey) setTurnstileReset((n) => n + 1);
         if (res.status === 409) {
           // Effect hierboven laadt de tijden opnieuw zodra we terug naar 'time' gaan.
           setTime(null);
@@ -343,6 +354,9 @@ export default function AfspraakPage() {
                       name="website"
                     />
                   </label>
+                  {turnstileSiteKey && (
+                    <Turnstile siteKey={turnstileSiteKey} onToken={setTurnstileToken} resetKey={turnstileReset} />
+                  )}
                   {error && <p className="form-error">{error}</p>}
                   <button type="submit" className="btn btn-primary" disabled={submitting}>
                     {submitting ? 'Bezig…' : 'Afspraak bevestigen'}
