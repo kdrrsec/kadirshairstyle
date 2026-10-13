@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
-import { Cormorant_Garamond, Playfair_Display, Poppins } from 'next/font/google';
+import { Playfair_Display, Poppins } from 'next/font/google';
+import localFont from 'next/font/local';
 import { site } from '@/content/site';
 import './globals.css';
 
@@ -11,9 +12,13 @@ const playfair = Playfair_Display({
   display: 'swap',
 });
 
-const cormorant = Cormorant_Garamond({
-  subsets: ['latin'],
-  weight: ['500', '600', '700'],
+// Lokaal meegeleverd (OFL), zodat de build niet afhangt van Google Fonts.
+const cormorant = localFont({
+  src: [
+    { path: './fonts/cormorant-garamond-latin-500-normal.woff2', weight: '500', style: 'normal' },
+    { path: './fonts/cormorant-garamond-latin-600-normal.woff2', weight: '600', style: 'normal' },
+    { path: './fonts/cormorant-garamond-latin-700-normal.woff2', weight: '700', style: 'normal' },
+  ],
   variable: '--font-cormorant',
   display: 'swap',
 });
