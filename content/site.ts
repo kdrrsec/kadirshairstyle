@@ -74,6 +74,8 @@ export const BOOKING_HREF = '/afspraak';
  * `durationMinutes` bepaalt hoe lang een tijdslot in de agenda wordt
  * vastgehouden — stem dit af met de salon.
  * `priceFrom` is de prijs in euro's (null = "op aanvraag").
+ * `aliases` zijn extra woorden waarmee de kapper de dienst via WhatsApp kan noemen
+ * (bijv. "AFSPRAAK morgen 11:00 Jan knip baard").
  * Diensten die hier worden weggehaald, worden in de database op inactief gezet
  * (oude afspraken blijven zo zichtbaar in het beheer).
  */
@@ -90,6 +92,7 @@ export const treatments = [
     slug: 'knippen-baard',
     tag: 'Combi',
     name: 'Knippen & baard',
+    aliases: ['knippen baard', 'knip baard', 'knippen + baard', 'knippen en baard'],
     description: 'Knippen en je baard in model, samen in één afspraak.',
     durationMinutes: 30,
     priceFrom: 30 as number | null,
@@ -98,6 +101,7 @@ export const treatments = [
     slug: 'kinderen',
     tag: 'Kids',
     name: 'Kinderen t/m 12 jaar',
+    aliases: ['kind', 'kinder', 'kinderknippen', 'jongen'],
     description: 'Een frisse coupe voor de jonge heren, tot en met 12 jaar.',
     durationMinutes: 30,
     priceFrom: 20 as number | null,
@@ -106,6 +110,7 @@ export const treatments = [
     slug: 'baard-modelleren',
     tag: 'Baard',
     name: 'Baard modelleren',
+    aliases: ['baard', 'baard trimmen', 'trimmen'],
     description: 'Je baard strak in model, met scherpe lijnen en de juiste lengte.',
     durationMinutes: 30,
     priceFrom: 15 as number | null,

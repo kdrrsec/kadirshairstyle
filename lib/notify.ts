@@ -105,6 +105,6 @@ export function dailyOverviewText(date: string, items: DayAppointment[]) {
     `☀️ *Goedemorgen!* ${longDate(date)}`,
     `Je hebt vandaag *${items.length}* ${items.length === 1 ? 'afspraak' : 'afspraken'}:`,
     '',
-    ...items.map((a) => `*${a.time}* ${a.name} – ${a.treatment} (${a.phone})`),
+    ...items.map((a) => `*${a.time}* ${a.name} – ${a.treatment}${a.phone ? ` (${a.phone})` : ''}`),
   ].join('\n');
 }

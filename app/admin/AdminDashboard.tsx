@@ -245,10 +245,12 @@ export function AdminDashboard() {
                     {a.treatment} · {a.duration} min
                     {past && <span className="adm-tag">Geweest</span>}
                   </p>
-                  <a href={telHref(a.phone)} className="adm-phone">
-                    <Phone size={14} strokeWidth={1.8} aria-hidden="true" />
-                    {a.phone}
-                  </a>
+                  {a.phone && (
+                    <a href={telHref(a.phone)} className="adm-phone">
+                      <Phone size={14} strokeWidth={1.8} aria-hidden="true" />
+                      {a.phone}
+                    </a>
+                  )}
                 </div>
                 <div className="adm-appt-actions">
                   <button type="button" className="adm-action" onClick={() => setRescheduling(a)}>

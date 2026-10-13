@@ -78,6 +78,23 @@ Sleutel kwijt? Stuur `SLEUTEL`. Nieuwe sleutel nodig? Stuur `NIEUWE SLEUTEL` (en
 
 Zonder deze variabelen gebeurt er niets. Lukt een melding een keer niet, dan gaat de boeking gewoon door.
 
+## Agenda beheren via WhatsApp
+
+De kapper kan zijn agenda ook regelen door een WhatsApp te sturen naar het AxaWeb-afzendnummer:
+
+| Bericht | Wat er gebeurt |
+| --- | --- |
+| `AFSPRAAK 11-11 11:15 Jan Jansen knippen` | Afspraak inplannen (telefoonnummer erachter mag). Bezet? Dan komen er vrije tijden terug. |
+| `BLOKKEER 24-10` / `BLOKKEER 24-10 13:00-17:00` / `BLOKKEER 24-10 t/m 26-10` | Dag(deel) dicht: online boeken kan dan niet |
+| `VRIJ 24-10` | Blokkade weghalen |
+| `VANDAAG`, `MORGEN`, `AGENDA 11-11` | Afspraken van die dag |
+| `ANNULEER 42` | Afspraak 42 annuleren |
+| `HELP` | Overzicht |
+
+Werking: AxaWeb Meldingen stuurt berichten van `WHATSAPP_PHONE` (ondertekend met
+`WHATSAPP_WEBHOOK_SECRET`) naar `/api/whatsapp`; het antwoord gaat via WhatsApp terug.
+De woorden voor diensten staan bij `aliases` in `content/site.ts`.
+
 ## Lokaal draaien
 
 ```bash
