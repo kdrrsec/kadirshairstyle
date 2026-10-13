@@ -26,7 +26,7 @@ export const site = {
   instagram: null as { handle: string; url: string } | null,
 
   /** Bijv. { handle: '@kadirshairstyle', url: 'https://www.tiktok.com/@kadirshairstyle' } */
-  tiktok: null as { handle: string; url: string } | null,
+  tiktok: { handle: '@kadirshairstyle', url: 'https://www.tiktok.com/@kadirshairstyle' } as { handle: string; url: string } | null,
 
   /**
    * Openingstijden. Worden zowel op de website getoond als gebruikt door het
@@ -124,7 +124,12 @@ export const treatments = [
  *   'https://www.instagram.com/reel/C1AbCdEfGhI/'
  * Zolang de lijst leeg is, toont de website nette placeholders.
  */
-export const socialVideos: string[] = [];
+export const socialVideos: string[] = [
+  'https://www.tiktok.com/@kadirshairstyle/video/7675820922569395489',
+  'https://www.tiktok.com/@kadirshairstyle/video/7503917319857442070',
+  'https://www.tiktok.com/@kadirshairstyle/video/7688478926976584993',
+  'https://www.tiktok.com/@kadirshairstyle/video/7666880674288274720',
+];
 
 export function fullAddress() {
   if (!site.address) return null;

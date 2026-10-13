@@ -51,7 +51,8 @@ export function StructuredData() {
   };
 
   if (site.phone) data.telephone = site.phone.href;
-  if (site.instagram) data.sameAs = [site.instagram.url];
+  const profiles = [site.instagram?.url, site.tiktok?.url].filter(Boolean);
+  if (profiles.length) data.sameAs = profiles;
   if (site.hoursConfirmed) {
     data.openingHoursSpecification = (Object.keys(site.hours) as DayKey[])
       .filter((d) => site.hours[d])
