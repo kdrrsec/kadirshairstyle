@@ -11,7 +11,7 @@
   --radius: 14px;
   --font-head: var(--font-playfair), 'Playfair Display', Georgia, serif;
   --font-body: var(--font-poppins), 'Poppins', system-ui, sans-serif;
-  --font-accent: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  --font-accent: var(--font-jost), 'Jost', 'Futura', system-ui, sans-serif;
 }
 
 * { box-sizing: border-box; }
@@ -90,9 +90,9 @@ h2.center { text-align: center; max-width: 640px; margin-left: auto; margin-righ
 }
 .nav-links a:not(.btn) {
   font-family: var(--font-accent);
-  font-size: 1.02rem;
-  font-weight: 600;
-  letter-spacing: 0.16em;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--ink-soft);
   position: relative;
@@ -808,9 +808,9 @@ a.btn-primary:hover::after,
   .nav-mobile a:not(.btn) {
     padding: 16px 4px;
     font-family: var(--font-accent);
-    font-size: 1.15rem;
-    font-weight: 600;
-    letter-spacing: 0.16em;
+    font-size: 0.92rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--ink-soft);
     border-bottom: 1px solid rgba(27,28,30,0.08);

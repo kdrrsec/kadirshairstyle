@@ -13,13 +13,12 @@ const playfair = Playfair_Display({
 });
 
 // Lokaal meegeleverd (OFL), zodat de build niet afhangt van Google Fonts.
-const cormorant = localFont({
+const jost = localFont({
   src: [
-    { path: './fonts/cormorant-garamond-latin-500-normal.woff2', weight: '500', style: 'normal' },
-    { path: './fonts/cormorant-garamond-latin-600-normal.woff2', weight: '600', style: 'normal' },
-    { path: './fonts/cormorant-garamond-latin-700-normal.woff2', weight: '700', style: 'normal' },
+    { path: './fonts/jost-latin-400-normal.woff2', weight: '400', style: 'normal' },
+    { path: './fonts/jost-latin-500-normal.woff2', weight: '500', style: 'normal' },
   ],
-  variable: '--font-cormorant',
+  variable: '--font-jost',
   display: 'swap',
 });
 
@@ -77,7 +76,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="nl" className={`${playfair.variable} ${cormorant.variable} ${poppins.variable}`}>
+    <html lang="nl" className={`${playfair.variable} ${jost.variable} ${poppins.variable}`}>
       <body>{children}</body>
     </html>
   );
