@@ -122,6 +122,9 @@ export const treatments = [
  * of Instagram-reels/posts, bijvoorbeeld:
  *   'https://www.tiktok.com/@kadirshairstyle/video/7300000000000000000'
  *   'https://www.instagram.com/reel/C1AbCdEfGhI/'
+ * Eigen videobestanden kan ook: zet ze in public/videos/ en gebruik bijv.
+ *   '/videos/fade.mp4'  (een '/videos/fade.jpg' wordt dan als stilstaand beeld gebruikt)
+ * Die spelen vanzelf en zonder geluid af, zonder naam, likes of logo.
  * Zolang de lijst leeg is, toont de website nette placeholders.
  */
 export const socialVideos: string[] = [

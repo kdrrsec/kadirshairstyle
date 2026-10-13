@@ -1,7 +1,8 @@
 export type SocialVideo = {
-  platform: 'tiktok' | 'instagram';
+  platform: 'tiktok' | 'instagram' | 'file';
   url: string;
   embedUrl: string;
+  poster?: string;
 };
 
 const TIKTOK_PARAMS = new URLSearchParams({
@@ -20,8 +21,15 @@ const TIKTOK_PARAMS = new URLSearchParams({
   closed_caption: '0',
 }).toString();
 
-/** Zet een TikTok- of Instagram-link om naar de officiële embed-URL. */
+/**
+ * Zet een TikTok- of Instagram-link om naar de officiële embed-URL.
+ * Een eigen bestand (bijv. '/videos/fade.mp4') wordt als gewone video getoond:
+ * zonder naam, likes of logo. Een poster '/videos/fade.jpg' wordt vanzelf gebruikt.
+ */
 export function parseSocialVideo(url: string): SocialVideo | null {
+  if (/^\/.+\.(mp4|webm)$/i.test(url)) {
+    return { platform: 'file', url, embedUrl: url, poster: url.replace(/\.(mp4|webm)$/i, '.jpg') };
+  }
   const tiktok = url.match(/tiktok\.com\/.*\/video\/(\d+)/) || url.match(/tiktok\.com\/(?:embed\/v2|player\/v1)\/(\d+)/);
   if (tiktok) {
     return {

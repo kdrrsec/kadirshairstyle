@@ -40,21 +40,25 @@ export function SocialVideos() {
           {videos.length > 0
             ? videos.map((v) => (
                 <li key={v.url} className={`social-card ${v.platform}`}>
-                  <iframe
-                    src={v.embedUrl}
-                    title={v.platform === 'tiktok' ? 'TikTok-video van Kadir’s Hairstyle' : 'Instagram-video van Kadir’s Hairstyle'}
-                    loading="lazy"
-                    allow="autoplay; encrypted-media; picture-in-picture"
-                    scrolling="no"
-                    tabIndex={-1}
-                  />
-                  {/* Klikvlak over de video: geen speler-menu's, wel doorklikken naar de video zelf. */}
+                  {v.platform === 'file' ? (
+                    <video src={v.embedUrl} poster={v.poster} autoPlay muted loop playsInline preload="metadata" />
+                  ) : (
+                    <iframe
+                      src={v.embedUrl}
+                      title={v.platform === 'tiktok' ? 'TikTok-video van Kadir’s Hairstyle' : 'Instagram-video van Kadir’s Hairstyle'}
+                      loading="lazy"
+                      allow="autoplay; encrypted-media; picture-in-picture"
+                      scrolling="no"
+                      tabIndex={-1}
+                    />
+                  )}
+                  {/* Klikvlak over de video: geen speler-menu's, wel doorklikken naar TikTok/Instagram. */}
                   <a
-                    href={v.url}
+                    href={v.platform === 'file' ? (site.tiktok?.url ?? v.url) : v.url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="social-link"
-                    aria-label={v.platform === 'tiktok' ? 'Bekijk deze video op TikTok' : 'Bekijk deze video op Instagram'}
+                    aria-label={v.platform === 'instagram' ? 'Bekijk deze video op Instagram' : 'Bekijk deze video op TikTok'}
                   />
                 </li>
               ))
