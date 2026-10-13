@@ -23,7 +23,7 @@ export function StructuredData() {
     logo: `${site.url}/logo.png`,
     slogan: 'Service - Quality - Good vibes',
     description:
-      "Moderne kapsalon in Zutphen voor knippen, kleuren, highlights, styling en haarverzorging, met persoonlijke aandacht.",
+      "Herenkapper in Zutphen voor knippen, knippen & baard, baard modelleren en kinderkapsels, met persoonlijke aandacht.",
     address: {
       '@type': 'PostalAddress',
       addressLocality: site.city,
@@ -45,6 +45,7 @@ export function StructuredData() {
       itemListElement: treatments.map((t) => ({
         '@type': 'Offer',
         itemOffered: { '@type': 'Service', name: t.name, description: t.description },
+        ...(t.priceFrom !== null && { price: t.priceFrom.toFixed(2), priceCurrency: 'EUR' }),
       })),
     },
   };

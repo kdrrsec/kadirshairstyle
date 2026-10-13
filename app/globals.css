@@ -418,30 +418,88 @@ h2.center { text-align: center; max-width: 640px; margin-left: auto; margin-righ
 .svc2-intro { margin: 0 0 28px; color: var(--text-soft); max-width: 520px; }
 .svc2-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid rgba(27,28,30,0.12); }
 .svc2-list li { border-bottom: 1px solid rgba(27,28,30,0.12); }
-.svc2-item { display: flex; flex-direction: column; gap: 2px; padding: 18px 0; }
+.svc2-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: 'name price' 'desc price';
+  column-gap: 24px;
+  row-gap: 2px;
+  align-items: center;
+  padding: 18px 0;
+}
+.svc2-tag { display: none; }
 .svc2-name {
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
+  grid-area: name;
   font-family: var(--font-head);
   font-size: 1.25rem;
   font-weight: 600;
   color: var(--ink);
 }
 .svc2-name .amp { font-family: var(--font-body); font-weight: 500; }
-.svc2-price { margin-left: auto; font-family: var(--font-body); font-size: 0.9rem; font-weight: 600; }
-.svc2-desc { font-size: 0.9rem; line-height: 1.55; color: var(--text-soft); }
+.svc2-desc { grid-area: desc; font-size: 0.9rem; line-height: 1.55; color: var(--text-soft); }
+.svc2-price {
+  grid-area: price;
+  font-family: var(--font-head);
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+}
 
 @media (max-width: 900px) {
   .svc2 { grid-template-columns: 1fr; gap: 36px; }
+  /* Mobiel/tablet: diensten als kaartjes in een raster */
+  .svc2-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; border-top: 0; }
+  .svc2-list li { border-bottom: 0; }
+  .svc2-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+    height: 100%;
+    padding: 16px 16px 14px;
+    border-radius: 16px;
+    background: var(--ivory);
+    border: 1px solid rgba(27, 28, 30, 0.08);
+    box-shadow: 0 12px 28px -20px rgba(27, 28, 30, 0.45);
+    overflow: hidden;
+  }
+  .svc2-item::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--champagne));
+  }
+  .svc2-tag {
+    display: inline-block;
+    align-self: flex-start;
+    padding: 4px 9px;
+    border-radius: 999px;
+    background: rgba(138, 115, 92, 0.12);
+    color: var(--accent);
+    font-size: 0.64rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .svc2-name { line-height: 1.2; margin-top: 4px; }
+  .svc2-desc { flex: 1; font-size: 0.8rem; line-height: 1.5; }
+  .svc2-price {
+    margin-top: 8px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(27, 28, 30, 0.08);
+    font-size: 1.5rem;
+    line-height: 1;
+  }
   .svc2-media { min-height: 0; aspect-ratio: 4 / 3; }
 }
 @media (max-width: 560px) {
   .svc2-media { aspect-ratio: 4 / 4.2; }
   .svc2-card { left: 12px; right: 12px; bottom: 12px; padding: 14px; }
   .svc2-card .cta { display: flex; width: 100%; }
-  .svc2-item { padding: 16px 0; }
-  .svc2-name { font-size: 1.12rem; }
+  .svc2-name { font-size: 1.08rem; }
 }
 
 /* Social video's */

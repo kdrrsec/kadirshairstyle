@@ -22,7 +22,8 @@ const TZ = 'Europe/Amsterdam';
 const WEEKDAY_KEYS: DayKey[] = ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za'];
 
 function formatEuro(value: number) {
-  return new Intl.NumberFormat('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value);
+  const whole = Number.isInteger(value);
+  return new Intl.NumberFormat('nl-NL', { minimumFractionDigits: whole ? 0 : 2, maximumFractionDigits: 2 }).format(value);
 }
 
 function formatPrice(value: number | null) {

@@ -51,6 +51,7 @@ export function ensureSchema() {
         );
 
         -- Anti-spam: genormaliseerd nummer en IP-hash per afspraak, en losse boekpogingen.
+        ALTER TABLE treatments ADD COLUMN IF NOT EXISTS active BOOLEAN NOT NULL DEFAULT true;
         ALTER TABLE appointments ADD COLUMN IF NOT EXISTS phone_e164 TEXT;
         ALTER TABLE appointments ADD COLUMN IF NOT EXISTS ip_hash TEXT;
         CREATE INDEX IF NOT EXISTS appointments_phone_e164_idx ON appointments (phone_e164);
@@ -77,6 +78,8 @@ export function ensureSchema() {
           [t.slug, t.name, t.durationMinutes, t.priceFrom, i + 1]
         );
       }
+      // Alleen de diensten uit content/site.ts zijn boekbaar.
+      await pool.query('UPDATE treatments SET active = (slug = ANY($1))', [treatments.map((t) => t.slug)]);
     })().catch((err) => {
       schemaReady = null;
       throw err;

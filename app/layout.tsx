@@ -31,7 +31,7 @@ const poppins = Poppins({
 
 const title = "Kadir's Hairstyle | Service · Quality · Good vibes";
 const description =
-  "Kadir's Hairstyle in Zutphen, kapsalon voor knippen, kleuren, highlights en styling. Maak vandaag nog online een afspraak.";
+  "Kadir's Hairstyle, herenkapper in Zutphen voor knippen, baard modelleren en kinderkapsels. Maak vandaag nog online een afspraak.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -46,8 +46,10 @@ export const metadata: Metadata = {
     "Kadir's Hairstyle Zutphen",
     'haarstylist Zutphen',
     'knippen Zutphen',
-    'haar kleuren Zutphen',
-    'highlights Zutphen',
+    'herenkapper Zutphen',
+    'barber Zutphen',
+    'baard trimmen Zutphen',
+    'kinderkapper Zutphen',
   ],
   applicationName: site.name,
   alternates: { canonical: '/' },

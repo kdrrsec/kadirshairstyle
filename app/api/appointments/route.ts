@@ -71,7 +71,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: phoneCheck.error }, { status: 400 });
   }
 
-  const { rows: treatmentRows } = await pool.query('SELECT name, duration_minutes FROM treatments WHERE id = $1', [
+  const { rows: treatmentRows } = await pool.query('SELECT name, duration_minutes FROM treatments WHERE id = $1 AND active', [
     Number(treatmentId),
   ]);
   if (treatmentRows.length === 0) {

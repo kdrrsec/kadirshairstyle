@@ -24,7 +24,7 @@ Alles wat nog niet bekend is staat in `content/site.ts` op `null`. De website to
 - **Instagram / TikTok**: `site.instagram` en `site.tiktok` (profiellinks)
 - **Video's**: plak links van TikTok-video's of Instagram-reels in `socialVideos` (in `content/site.ts`); ze verschijnen in de sectie "Bekijk ons werk"
 - **Openingstijden**: ingevuld in `site.hours` (ma 11–16, di–do 10–18, vr 10–20, za 10–17, zo gesloten). Het reserveringssysteem gebruikt deze tijden ook.
-- **Behandelingen**: elke behandeling duurt 30 minuten (`durationMinutes`; tijdsloten per half uur). Prijs (`priceFrom`, nu `null` → "op aanvraag"). Wijzigingen worden bij de start van de server naar de database gesynchroniseerd.
+- **Behandelingen**: Knippen €25, Knippen & baard €30, Kinderen t/m 12 jaar €20, Baard modelleren €15 (`treatments` in `content/site.ts`). Elke behandeling duurt 30 minuten; een geboekt half uur is voor alle diensten bezet. Wijzigingen worden bij de start van de server naar de database gesynchroniseerd; weggehaalde diensten worden inactief (oude afspraken blijven zichtbaar in het beheer).
 - **Logo**: `public/logo.png` (donker) en `public/logo-light.png` (licht), met slogan; `public/logo-compact.png` / `logo-compact-light.png` zonder slogan (navigatie en beheer). Allemaal transparant. De favicon (`app/icon.png`, `app/apple-icon.png`) is de schaar uit het logo.
 - **Hero-foto**: `public/hero-kadirshairstyle.jpg` (eigen salonfoto), ingesteld in `content/images.ts`.
 - **Domein**: zet `NEXT_PUBLIC_SITE_URL` (wordt gebruikt voor canonical, sitemap en Open Graph).

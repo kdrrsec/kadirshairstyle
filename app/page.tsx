@@ -12,7 +12,8 @@ import { CtaInner } from '@/components/CtaInner';
 const DAY_ORDER: DayKey[] = ['ma', 'di', 'wo', 'do', 'vr', 'za', 'zo'];
 
 function formatEuro(value: number) {
-  return new Intl.NumberFormat('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value);
+  const whole = Number.isInteger(value);
+  return new Intl.NumberFormat('nl-NL', { minimumFractionDigits: whole ? 0 : 2, maximumFractionDigits: 2 }).format(value);
 }
 
 /** Groepeert opeenvolgende dagen met dezelfde tijden, bijv. "Di – Do: 09:00 – 18:00". */
@@ -105,8 +106,8 @@ export default function Home() {
                 vertrouwen de deur uitgaat, of je nu op zoek bent naar een frisse nieuwe look of een vertrouwde stijl.
               </p>
               <p>
-                Bij ons ben je aan het juiste adres voor knippen, kleuren, stylen en alles daartussenin. Kwaliteit,
-                gezelligheid en aandacht voor de klant staan bij ons voorop.
+                Bij ons ben je aan het juiste adres voor een strakke knipbeurt, een verzorgde baard of allebei. Ook
+                de jongste heren zijn welkom. Kwaliteit, gezelligheid en aandacht voor de klant staan bij ons voorop.
               </p>
             </div>
           </div>
@@ -135,25 +136,24 @@ export default function Home() {
               <p className="eyebrow">Diensten</p>
               <h2>Waar wij je mee kunnen helpen</h2>
               <p className="svc2-intro">
-                Van een frisse coupe tot kleur en verzorging. Kies je behandeling en plan direct online een moment dat
-                jou uitkomt.
+                Van een frisse coupe tot een strak gemodelleerde baard. Elke afspraak duurt 30 minuten: kies je dienst
+                en plan direct online een moment dat jou uitkomt.
               </p>
 
               <ol className="svc2-list">
                 {treatments.map((t) => (
                   <li key={t.slug} className="svc2-item">
+                    <span className="svc2-tag">{t.tag}</span>
                     <span className="svc2-name">
-                      <span>
-                        {t.name.split('&').map((part, j) => (
-                          <Fragment key={j}>
-                            {j > 0 && <span className="amp">&amp;</span>}
-                            {part}
-                          </Fragment>
-                        ))}
-                      </span>
-                      {t.priceFrom !== null && <span className="svc2-price">€{formatEuro(t.priceFrom)}</span>}
+                      {t.name.split('&').map((part, j) => (
+                        <Fragment key={j}>
+                          {j > 0 && <span className="amp">&amp;</span>}
+                          {part}
+                        </Fragment>
+                      ))}
                     </span>
                     <span className="svc2-desc">{t.description}</span>
+                    {t.priceFrom !== null && <span className="svc2-price">€{formatEuro(t.priceFrom)}</span>}
                   </li>
                 ))}
               </ol>

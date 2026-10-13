@@ -73,57 +73,42 @@ export const BOOKING_HREF = '/afspraak';
  *
  * `durationMinutes` bepaalt hoe lang een tijdslot in de agenda wordt
  * vastgehouden — stem dit af met de salon.
- * `priceFrom` staat op null zolang prijzen niet bekend zijn; de website
- * toont dan "op aanvraag".
+ * `priceFrom` is de prijs in euro's (null = "op aanvraag").
+ * Diensten die hier worden weggehaald, worden in de database op inactief gezet
+ * (oude afspraken blijven zo zichtbaar in het beheer).
  */
 export const treatments = [
   {
     slug: 'knippen',
     tag: 'Knippen',
     name: 'Knippen',
-    description: 'Een knipbeurt op maat, helemaal afgestemd op jouw stijl.',
+    description: 'Een strakke knipbeurt op maat, helemaal afgestemd op jouw stijl.',
     durationMinutes: 30,
-    priceFrom: null as number | null,
+    priceFrom: 25 as number | null,
   },
   {
-    slug: 'wassen-knippen',
+    slug: 'knippen-baard',
     tag: 'Combi',
-    name: 'Wassen & knippen',
-    description: 'Wassen, verzorgen en knippen in één ontspannen behandeling.',
+    name: 'Knippen & baard',
+    description: 'Knippen en je baard in model, samen in één afspraak.',
     durationMinutes: 30,
-    priceFrom: null as number | null,
+    priceFrom: 30 as number | null,
   },
   {
-    slug: 'styling-fohnen',
-    tag: 'Styling',
-    name: 'Styling / föhnen',
-    description: 'Föhnen en stylen voor volume, glans en een verzorgde look.',
+    slug: 'kinderen',
+    tag: 'Kids',
+    name: 'Kinderen t/m 12 jaar',
+    description: 'Een frisse coupe voor de jonge heren, tot en met 12 jaar.',
     durationMinutes: 30,
-    priceFrom: null as number | null,
+    priceFrom: 20 as number | null,
   },
   {
-    slug: 'kleuren',
-    tag: 'Kleur',
-    name: 'Kleuren',
-    description: 'Een kleur die bij je past, met persoonlijk advies vooraf.',
+    slug: 'baard-modelleren',
+    tag: 'Baard',
+    name: 'Baard modelleren',
+    description: 'Je baard strak in model, met scherpe lijnen en de juiste lengte.',
     durationMinutes: 30,
-    priceFrom: null as number | null,
-  },
-  {
-    slug: 'highlights',
-    tag: 'Kleur',
-    name: 'Highlights',
-    description: 'Licht en diepte op de juiste plekken, natuurlijk of opvallend.',
-    durationMinutes: 30,
-    priceFrom: null as number | null,
-  },
-  {
-    slug: 'haarverzorging',
-    tag: 'Verzorging',
-    name: 'Haarverzorging',
-    description: 'Verzorgende behandelingen voor gezond, sterk en zacht haar.',
-    durationMinutes: 30,
-    priceFrom: null as number | null,
+    priceFrom: 15 as number | null,
   },
 ];
 

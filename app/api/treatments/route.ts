@@ -10,7 +10,7 @@ export async function GET() {
 
   await ensureSchema();
   const { rows } = await pool.query(
-    'SELECT id, slug, name, duration_minutes, price_from FROM treatments ORDER BY sort_order ASC'
+    'SELECT id, slug, name, duration_minutes, price_from FROM treatments WHERE active ORDER BY sort_order ASC'
   );
   return NextResponse.json({
     treatments: rows.map((r) => ({

@@ -18,7 +18,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Ongeldige aanvraag' }, { status: 400 });
   }
 
-  const { rows: treatmentRows } = await pool.query('SELECT duration_minutes FROM treatments WHERE id = $1', [
+  const { rows: treatmentRows } = await pool.query('SELECT duration_minutes FROM treatments WHERE id = $1 AND active', [
     treatmentId,
   ]);
   if (treatmentRows.length === 0) {
