@@ -2,6 +2,7 @@ import { Play } from 'lucide-react';
 import { site, socialVideos } from '@/content/site';
 import { parseSocialVideo } from '@/lib/social';
 import { InstagramIcon, TikTokIcon } from './SocialIcons';
+import { CtaInner } from '@/components/CtaInner';
 
 const PLACEHOLDERS = 4;
 
@@ -19,13 +20,17 @@ export function SocialVideos() {
           </div>
           <div className="social-links">
             {site.tiktok && (
-              <a href={site.tiktok.url} target="_blank" rel="noopener noreferrer" className="btn btn-ghost social-btn">
-                <TikTokIcon size={16} /> TikTok
+              <a href={site.tiktok.url} target="_blank" rel="noopener noreferrer" className="cta cta-soft cta-sm social-btn">
+                <CtaInner>
+                  <TikTokIcon size={16} /> TikTok
+                </CtaInner>
               </a>
             )}
             {site.instagram && (
-              <a href={site.instagram.url} target="_blank" rel="noopener noreferrer" className="btn btn-ghost social-btn">
-                <InstagramIcon size={16} /> Instagram
+              <a href={site.instagram.url} target="_blank" rel="noopener noreferrer" className="cta cta-soft cta-sm social-btn">
+                <CtaInner>
+                  <InstagramIcon size={16} /> Instagram
+                </CtaInner>
               </a>
             )}
           </div>

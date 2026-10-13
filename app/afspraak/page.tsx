@@ -6,6 +6,7 @@ import { isValidPhoneNumber } from 'libphonenumber-js/min';
 import { Brand } from '@/components/Brand';
 import { Turnstile } from '@/components/Turnstile';
 import { site, type DayKey } from '@/content/site';
+import { CtaInner } from '@/components/CtaInner';
 
 type Treatment = {
   id: number;
@@ -358,8 +359,8 @@ export default function AfspraakPage() {
                     <Turnstile siteKey={turnstileSiteKey} onToken={setTurnstileToken} resetKey={turnstileReset} />
                   )}
                   {error && <p className="form-error">{error}</p>}
-                  <button type="submit" className="btn btn-primary" disabled={submitting}>
-                    {submitting ? 'Bezig…' : 'Afspraak bevestigen'}
+                  <button type="submit" className="cta cta-dark cta-lg" disabled={submitting}>
+                    <CtaInner>{submitting ? 'Bezig…' : 'Afspraak bevestigen'}</CtaInner>
                   </button>
                   <p className="details-note">We nemen alleen contact op als er iets wijzigt aan je afspraak.</p>
                 </form>
@@ -385,8 +386,8 @@ export default function AfspraakPage() {
                     <>Neem gerust contact op met de salon.</>
                   )}
                 </p>
-                <Link href="/" className="btn btn-primary">
-                  Terug naar de website
+                <Link href="/" className="cta cta-dark">
+                  <CtaInner>Terug naar de website</CtaInner>
                 </Link>
               </div>
             )}
@@ -422,8 +423,8 @@ export default function AfspraakPage() {
             )}
 
             {step === 'service' && treatmentId && (
-              <button type="button" className="btn btn-primary order-cta" onClick={() => setStep('time')}>
-                Kies een tijd
+              <button type="button" className="cta cta-dark cta-block order-cta" onClick={() => setStep('time')}>
+                <CtaInner>Kies een tijd</CtaInner>
               </button>
             )}
           </aside>

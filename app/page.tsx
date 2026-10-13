@@ -7,6 +7,7 @@ import { SocialVideos } from '@/components/SocialVideos';
 import { StructuredData } from '@/components/StructuredData';
 import { heroImage } from '@/content/images';
 import { BOOKING_HREF, dayLabels, fullAddress, site, treatments, type DayKey } from '@/content/site';
+import { CtaInner } from '@/components/CtaInner';
 
 const DAY_ORDER: DayKey[] = ['ma', 'di', 'wo', 'do', 'vr', 'za', 'zo'];
 
@@ -58,11 +59,11 @@ export default function Home() {
               <span className="sr-only"> — kapper in {site.city}</span>
             </h1>
             <div className="hero-actions">
-              <Link href={BOOKING_HREF} className="btn btn-primary">
-                Maak afspraak
+              <Link href={BOOKING_HREF} className="cta cta-light cta-lg">
+                <CtaInner>Maak afspraak</CtaInner>
               </Link>
-              <a href="#diensten" className="btn btn-ghost">
-                Bekijk diensten
+              <a href="#diensten" className="cta cta-glass cta-lg">
+                <CtaInner>Bekijk diensten</CtaInner>
               </a>
             </div>
           </div>
@@ -124,8 +125,8 @@ export default function Home() {
               />
               <div className="svc2-card">
                 <p>Weet je wat je wilt?</p>
-                <Link href={BOOKING_HREF} className="btn btn-primary">
-                  Maak direct je afspraak
+                <Link href={BOOKING_HREF} className="cta cta-light">
+                  <CtaInner>Maak direct je afspraak</CtaInner>
                 </Link>
               </div>
             </div>
@@ -206,17 +207,17 @@ export default function Home() {
                 )}
               </div>
               <div className="contact-actions">
-                <Link href={BOOKING_HREF} className="btn btn-primary">
-                  Maak afspraak
+                <Link href={BOOKING_HREF} className="cta cta-dark">
+                  <CtaInner>Maak afspraak</CtaInner>
                 </Link>
                 {mapsQuery && (
                   <a
                     href={`https://www.google.com/maps/dir/?api=1&destination=${mapsQuery}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn btn-ghost"
+                    className="cta cta-soft"
                   >
-                    Route plannen
+                    <CtaInner>Route plannen</CtaInner>
                   </a>
                 )}
               </div>

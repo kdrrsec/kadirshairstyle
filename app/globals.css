@@ -88,7 +88,7 @@ h2.center { text-align: center; max-width: 640px; margin-left: auto; margin-righ
   gap: 16px;
   justify-self: end;
 }
-.nav-links a:not(.btn) {
+.nav-links a:not(.cta) {
   font-family: var(--font-accent);
   font-size: 0.8rem;
   font-weight: 500;
@@ -99,7 +99,7 @@ h2.center { text-align: center; max-width: 640px; margin-left: auto; margin-righ
   padding: 6px 0;
   transition: color 0.25s ease;
 }
-.nav-links a:not(.btn)::after {
+.nav-links a:not(.cta)::after {
   content: '';
   position: absolute;
   left: 50%; bottom: 0;
@@ -108,8 +108,8 @@ h2.center { text-align: center; max-width: 640px; margin-left: auto; margin-righ
   transform: translateX(-50%) scaleX(0);
   transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
-.nav-links a:not(.btn):hover { color: var(--ink); }
-.nav-links a:not(.btn):hover::after { transform: translateX(-50%) scaleX(1); }
+.nav-links a:not(.cta):hover { color: var(--ink); }
+.nav-links a:not(.cta):hover::after { transform: translateX(-50%) scaleX(1); }
 
 .burger {
   display: none;
@@ -193,23 +193,113 @@ h2.center { text-align: center; max-width: 640px; margin-left: auto; margin-righ
   --btn-sweep: var(--ink);
   --btn-sweep-fg: var(--ivory);
 }
-/* Pijltje bij de belangrijkste knoppen */
-a.btn-primary::after,
-.order-cta::after,
-.details-form .btn-primary::after {
-  content: '';
-  width: 16px;
-  height: 10px;
-  background: currentColor;
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 10' fill='none' stroke='black' stroke-width='1.4'%3E%3Cpath d='M0 5h15M11 1l4 4-4 4'/%3E%3C/svg%3E") center / contain no-repeat;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 10' fill='none' stroke='black' stroke-width='1.4'%3E%3Cpath d='M0 5h15M11 1l4 4-4 4'/%3E%3C/svg%3E") center / contain no-repeat;
-  transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+/* Pilknoppen (zelfde knop als Bus4Rent): gevulde pil met dunne rand; bij hover krijgt de pijl een eigen cirkel. */
+.cta {
+  --cta-fill: var(--ink);
+  --cta-fill-hover: #000;
+  --cta-fg: var(--ivory);
+  --cta-ring: rgba(27, 28, 30, 0.45);
+  --cta-ring-hover: var(--ink);
+  --cta-h: 44px;
+  --cta-pl: 24px;
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  display: inline-flex;
+  max-width: 100%;
+  padding: 3px;
+  border: 1px solid var(--cta-ring);
+  border-radius: 999px;
+  background: none;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--cta-fg);
+  cursor: pointer;
+  transition: border-color 0.3s var(--ease-soft);
 }
-a.btn-primary:hover::after,
-.order-cta:hover::after,
-.details-form .btn-primary:hover::after { transform: translateX(4px); }
-.nav-cta { padding: 13px 22px; font-size: 0.72rem; }
-.nav-cta::after { display: none; }
+.cta-fill {
+  position: relative;
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: var(--cta-h);
+  padding: 6px calc(var(--cta-pl) + var(--cta-h) + 4px) 6px var(--cta-pl);
+  border-radius: 999px;
+  background: var(--cta-fill);
+  color: var(--cta-fg);
+  text-align: center;
+  transition: margin 0.3s var(--ease-soft), padding 0.3s var(--ease-soft), background-color 0.3s var(--ease-soft);
+}
+.cta-arrow {
+  position: absolute;
+  right: var(--cta-pl);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.cta-circle {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--cta-h);
+  height: var(--cta-h);
+  border-radius: 999px;
+  background: var(--cta-fill-hover);
+  color: var(--cta-fg);
+  opacity: 0;
+  transform: scale(0.5);
+  transition: opacity 0.3s var(--ease-soft), transform 0.3s var(--ease-soft), background-color 0.3s var(--ease-soft);
+}
+.cta:not(:disabled):hover,
+.cta:focus-visible { border-color: var(--cta-ring-hover); }
+.cta:not(:disabled):hover .cta-fill,
+.cta:focus-visible .cta-fill {
+  margin-right: calc(var(--cta-h) + 4px);
+  padding-right: var(--cta-pl);
+  background: var(--cta-fill-hover);
+}
+.cta:not(:disabled):hover .cta-arrow,
+.cta:focus-visible .cta-arrow { opacity: 0; transform: translateX(8px); }
+.cta:not(:disabled):hover .cta-circle,
+.cta:focus-visible .cta-circle { opacity: 1; transform: scale(1); }
+.cta:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.cta:disabled { opacity: 0.7; cursor: wait; }
+@media (min-width: 640px) { .cta-fill { white-space: nowrap; } }
+
+/* Maten */
+.cta-sm { --cta-h: 40px; --cta-pl: 20px; font-size: 0.9rem; }
+.cta-lg { --cta-h: 48px; --cta-pl: 28px; font-size: 1rem; }
+.cta-block { display: flex; width: 100%; }
+
+/* Varianten */
+.cta-light {
+  --cta-fill: var(--ivory);
+  --cta-fill-hover: #ffffff;
+  --cta-fg: var(--ink);
+  --cta-ring: rgba(245, 242, 236, 0.35);
+  --cta-ring-hover: var(--ivory);
+}
+.cta-glass {
+  --cta-fill: rgba(245, 242, 236, 0.1);
+  --cta-fill-hover: rgba(245, 242, 236, 0.2);
+  --cta-fg: var(--ivory);
+  --cta-ring: rgba(245, 242, 236, 0.35);
+  --cta-ring-hover: var(--ivory);
+}
+.cta-glass .cta-fill,
+.cta-glass .cta-circle { backdrop-filter: blur(6px); }
+.cta-soft {
+  --cta-fill: var(--ivory-dark);
+  --cta-fill-hover: #ded6c8;
+  --cta-fg: var(--ink);
+  --cta-ring: rgba(27, 28, 30, 0.2);
+  --cta-ring-hover: rgba(27, 28, 30, 0.6);
+}
 
 /* Hero */
 .hero {
@@ -265,22 +355,7 @@ a.btn-primary:hover::after,
   justify-content: center;
   flex-wrap: wrap;
 }
-.hero .btn-primary {
-  --btn-bg: var(--ivory);
-  --btn-fg: var(--ink);
-  --btn-border: var(--ivory);
-  --btn-sweep: var(--champagne);
-  --btn-sweep-fg: var(--ink);
-  box-shadow: 0 14px 30px -16px rgba(0, 0, 0, 0.8);
-}
 .hero h1 em { font-style: italic; color: var(--champagne); }
-.hero .btn-ghost {
-  --btn-fg: var(--ivory);
-  --btn-border: rgba(245, 242, 236, 0.55);
-  --btn-sweep: var(--ivory);
-  --btn-sweep-fg: var(--ink);
-  backdrop-filter: blur(2px);
-}
 
 /* Sections */
 .section { padding: 100px 0; }
@@ -337,13 +412,6 @@ a.btn-primary:hover::after,
   -webkit-backdrop-filter: blur(8px);
 }
 .svc2-card p { margin: 0; color: var(--ivory); font-family: var(--font-head); font-size: 1.2rem; }
-.svc2-card .btn-primary {
-  --btn-bg: var(--ivory);
-  --btn-fg: var(--ink);
-  --btn-border: var(--ivory);
-  --btn-sweep: var(--champagne);
-  --btn-sweep-fg: var(--ink);
-}
 
 .svc2-content { display: flex; flex-direction: column; justify-content: center; }
 .svc2-content h2 { margin-bottom: 0.3em; }
@@ -371,7 +439,7 @@ a.btn-primary:hover::after,
 @media (max-width: 560px) {
   .svc2-media { aspect-ratio: 4 / 4.2; }
   .svc2-card { left: 12px; right: 12px; bottom: 12px; padding: 14px; }
-  .svc2-card .btn { width: 100%; text-align: center; }
+  .svc2-card .cta { display: flex; width: 100%; }
   .svc2-item { padding: 16px 0; }
   .svc2-name { font-size: 1.12rem; }
 }
@@ -388,7 +456,6 @@ a.btn-primary:hover::after,
 .social-head h2 { margin-bottom: 0.3em; }
 .social-intro { margin: 0; color: var(--text-soft); max-width: 460px; }
 .social-links { display: flex; gap: 10px; flex-wrap: wrap; }
-.social-btn { display: inline-flex; align-items: center; gap: 8px; }
 .social-rail {
   list-style: none;
   margin: 0;
@@ -738,7 +805,7 @@ a.btn-primary:hover::after,
   font-size: 0.85rem;
   letter-spacing: 0.04em;
 }
-.order-cta { width: 100%; margin-top: 20px; text-align: center; }
+.order-cta { margin-top: 20px; }
 
 .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; font-size: 0.9rem; font-weight: 500; color: var(--ink-soft); }
 .field input {
@@ -805,7 +872,7 @@ a.btn-primary:hover::after,
     z-index: 95;
   }
   .nav-mobile.open { transform: translateY(0); opacity: 1; pointer-events: auto; }
-  .nav-mobile a:not(.btn) {
+  .nav-mobile a:not(.cta) {
     padding: 16px 4px;
     font-family: var(--font-accent);
     font-size: 0.92rem;
@@ -815,7 +882,7 @@ a.btn-primary:hover::after,
     color: var(--ink-soft);
     border-bottom: 1px solid rgba(27,28,30,0.08);
   }
-  .nav-mobile-cta { margin-top: 18px; width: 100%; }
+  .nav-mobile-cta { margin-top: 18px; }
 
   .nav-right { grid-column: 3; }
   .section { padding: 72px 0; }

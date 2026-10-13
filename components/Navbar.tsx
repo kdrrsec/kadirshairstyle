@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { BOOKING_HREF, navItems } from '@/content/site';
 import { Brand } from './Brand';
+import { CtaInner } from '@/components/CtaInner';
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
@@ -32,8 +33,8 @@ export function Navbar() {
             ))}
           </nav>
           <div className="nav-right">
-            <Link href={BOOKING_HREF} className="btn btn-primary nav-cta">
-              Maak afspraak
+            <Link href={BOOKING_HREF} className="cta cta-dark cta-sm nav-cta">
+              <CtaInner>Maak afspraak</CtaInner>
             </Link>
             <button
               type="button"
@@ -55,8 +56,8 @@ export function Navbar() {
               {item.label}
             </a>
           ))}
-          <Link href={BOOKING_HREF} className="btn btn-primary nav-mobile-cta" onClick={close}>
-            Maak afspraak
+          <Link href={BOOKING_HREF} className="cta cta-dark cta-block nav-mobile-cta" onClick={close}>
+            <CtaInner>Maak afspraak</CtaInner>
           </Link>
         </nav>
       </header>
