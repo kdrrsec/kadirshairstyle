@@ -44,13 +44,18 @@ export function SocialVideos() {
                     src={v.embedUrl}
                     title={v.platform === 'tiktok' ? 'TikTok-video van Kadir’s Hairstyle' : 'Instagram-video van Kadir’s Hairstyle'}
                     loading="lazy"
-                    allow="encrypted-media; picture-in-picture; fullscreen"
-                    allowFullScreen
+                    allow="autoplay; encrypted-media; picture-in-picture"
                     scrolling="no"
+                    tabIndex={-1}
                   />
-                  <span className="social-badge" aria-hidden="true">
-                    {v.platform === 'tiktok' ? <TikTokIcon size={14} /> : <InstagramIcon size={14} />}
-                  </span>
+                  {/* Klikvlak over de video: geen speler-menu's, wel doorklikken naar de video zelf. */}
+                  <a
+                    href={v.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="social-link"
+                    aria-label={v.platform === 'tiktok' ? 'Bekijk deze video op TikTok' : 'Bekijk deze video op Instagram'}
+                  />
                 </li>
               ))
             : Array.from({ length: PLACEHOLDERS }, (_, i) => (

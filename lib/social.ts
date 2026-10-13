@@ -4,6 +4,22 @@ export type SocialVideo = {
   embedUrl: string;
 };
 
+const TIKTOK_PARAMS = new URLSearchParams({
+  autoplay: '1',
+  loop: '1',
+  controls: '0',
+  progress_bar: '0',
+  play_button: '0',
+  volume_control: '0',
+  fullscreen_button: '0',
+  timestamp: '0',
+  music_info: '0',
+  description: '0',
+  rel: '0',
+  native_context_menu: '0',
+  closed_caption: '0',
+}).toString();
+
 /** Zet een TikTok- of Instagram-link om naar de officiële embed-URL. */
 export function parseSocialVideo(url: string): SocialVideo | null {
   const tiktok = url.match(/tiktok\.com\/.*\/video\/(\d+)/) || url.match(/tiktok\.com\/(?:embed\/v2|player\/v1)\/(\d+)/);
@@ -11,7 +27,8 @@ export function parseSocialVideo(url: string): SocialVideo | null {
     return {
       platform: 'tiktok',
       url,
-      embedUrl: `https://www.tiktok.com/player/v1/${tiktok[1]}?music_info=0&description=0&rel=0&native_context_menu=0&closed_caption=0`,
+      // Speelt vanzelf en in een lus af, zonder knoppen, balk, accountnaam of beschrijving.
+      embedUrl: `https://www.tiktok.com/player/v1/${tiktok[1]}?${TIKTOK_PARAMS}`,
     };
   }
   const insta = url.match(/instagram\.com\/(reel|reels|p|tv)\/([A-Za-z0-9_-]+)/);
