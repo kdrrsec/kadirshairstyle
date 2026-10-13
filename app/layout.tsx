@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Playfair_Display, Poppins } from 'next/font/google';
+import { Cormorant_Garamond, Playfair_Display, Poppins } from 'next/font/google';
 import { site } from '@/content/site';
 import './globals.css';
 
@@ -11,6 +11,13 @@ const playfair = Playfair_Display({
   display: 'swap',
 });
 
+const cormorant = Cormorant_Garamond({
+  subsets: ['latin'],
+  weight: ['500', '600', '700'],
+  variable: '--font-cormorant',
+  display: 'swap',
+});
+
 const poppins = Poppins({
   subsets: ['latin'],
   weight: ['300', '400', '500', '600'],
@@ -18,7 +25,7 @@ const poppins = Poppins({
   display: 'swap',
 });
 
-const title = "Kadir's Hairstyle | Kapper & Kapsalon in Zutphen";
+const title = "Kadir's Hairstyle | Service · Quality · Good vibes";
 const description =
   "Kadir's Hairstyle in Zutphen, kapsalon voor knippen, kleuren, highlights en styling. Maak vandaag nog online een afspraak.";
 
@@ -65,7 +72,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="nl" className={`${playfair.variable} ${poppins.variable}`}>
+    <html lang="nl" className={`${playfair.variable} ${cormorant.variable} ${poppins.variable}`}>
       <body>{children}</body>
     </html>
   );
