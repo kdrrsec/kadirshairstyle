@@ -208,14 +208,6 @@ export default function Home() {
                     <span className="pending">Openingstijden volgen binnenkort</span>
                   )}
                 </div>
-                {site.instagram && (
-                  <div className="contact-item">
-                    <span className="contact-label">Instagram</span>
-                    <a href={site.instagram.url} target="_blank" rel="noopener noreferrer">
-                      {site.instagram.handle}
-                    </a>
-                  </div>
-                )}
               </div>
               <div className="contact-actions">
                 <Link href={BOOKING_HREF} className="cta cta-dark">
