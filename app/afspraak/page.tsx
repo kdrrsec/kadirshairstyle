@@ -363,7 +363,10 @@ export default function AfspraakPage() {
                   <button type="submit" className="cta cta-dark cta-lg" disabled={submitting}>
                     <CtaInner>{submitting ? 'Bezig…' : 'Afspraak bevestigen'}</CtaInner>
                   </button>
-                  <p className="details-note">We nemen alleen contact op als er iets wijzigt aan je afspraak.</p>
+                  <p className="details-note">
+                    We nemen alleen contact op als er iets wijzigt aan je afspraak. Lees in onze{' '}
+                    <Link href="/privacy">privacyverklaring</Link> hoe we met je gegevens omgaan.
+                  </p>
                 </form>
               </div>
             )}

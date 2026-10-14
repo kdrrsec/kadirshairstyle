@@ -41,6 +41,13 @@ Alles wat nog niet bekend is staat in `content/site.ts` op `null`. De website to
 
 De grenzen staan in `lib/antispam.ts` (`LIMITS`).
 
+## Privacy (AVG)
+
+- Privacyverklaring op `/privacy` (link in de footer en bij het boekformulier).
+- **Bewaartermijn:** afspraken worden 6 maanden na de afspraakdatum automatisch gewist (`lib/retention.ts`, draait elke ochtend mee met de cron). De IP-hash van een boeking wordt na 1 dag gewist.
+- Functies draaien in **Frankfurt** (`regions: ["fra1"]` in `vercel.json`), net als de Neon-database.
+- Geen analytics of trackingcookies; lettertypes en video's staan op de site zelf.
+
 ## Database en beheer instellen (Vercel)
 
 1. Vercel → project **kadirshairstyle** → **Storage** → **Create Database** → **Neon (Postgres)** → koppel aan het project.

@@ -11,7 +11,7 @@ export function Footer() {
       <div className="container footer-inner">
         <Brand className="brand-footer" tone="light" />
         <p>
-          &copy; {year} {site.name} {site.city}. Alle rechten voorbehouden.
+          &copy; {year} {site.name} {site.city}. Alle rechten voorbehouden. <a href="/privacy">Privacy</a>
         </p>
         <div className="socials">
           {site.instagram && (

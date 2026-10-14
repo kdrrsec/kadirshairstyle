@@ -3,6 +3,7 @@ import { timingSafeEqual } from 'node:crypto';
 import { databaseUnavailable } from '@/lib/api';
 import { hoursForDate, toAmsterdamParts } from '@/lib/schedule';
 import { sendDailyOverview } from '@/lib/overview';
+import { purgeOldData } from '@/lib/retention';
 
 export const dynamic = 'force-dynamic';
 
@@ -15,7 +16,10 @@ function authorized(request: NextRequest) {
   return a.length === b.length && timingSafeEqual(a, b);
 }
 
-/** Elke ochtend (Vercel Cron): WhatsApp naar de kapper met alle afspraken van vandaag. */
+/**
+ * Elke ochtend (Vercel Cron): oude gegevens opschonen (bewaartermijn) en de kapper
+ * via WhatsApp alle afspraken van vandaag sturen.
+ */
 export async function GET(request: NextRequest) {
   if (!authorized(request)) {
     return NextResponse.json({ error: 'Geen toegang' }, { status: 401 });
@@ -23,9 +27,11 @@ export async function GET(request: NextRequest) {
   const unavailable = databaseUnavailable();
   if (unavailable) return unavailable;
 
+  const purged = await purgeOldData();
+
   // Op gesloten dagen geen bericht.
   if (!hoursForDate(toAmsterdamParts(new Date()).date)) {
-    return NextResponse.json({ sent: false, reason: 'gesloten' });
+    return NextResponse.json({ sent: false, reason: 'gesloten', ...purged });
   }
-  return NextResponse.json(await sendDailyOverview());
+  return NextResponse.json({ ...(await sendDailyOverview()), ...purged });
 }
