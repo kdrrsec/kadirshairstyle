@@ -23,7 +23,7 @@ export const site = {
   phone: null as { display: string; href: string } | null,
 
   /** Bijv. { handle: '@kadirshairstyle', url: 'https://www.instagram.com/kadirshairstyle/' } */
-  instagram: null as { handle: string; url: string } | null,
+  instagram: { handle: '@kadirshairstyle', url: 'https://www.instagram.com/kadirshairstyle/' } as { handle: string; url: string } | null,
 
   /** Bijv. { handle: '@kadirshairstyle', url: 'https://www.tiktok.com/@kadirshairstyle' } */
   tiktok: { handle: '@kadirshairstyle', url: 'https://www.tiktok.com/@kadirshairstyle' } as { handle: string; url: string } | null,
