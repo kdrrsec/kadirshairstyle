@@ -128,10 +128,10 @@ export const treatments = [
  * Zolang de lijst leeg is, toont de website nette placeholders.
  */
 export const socialVideos: string[] = [
-  'https://www.tiktok.com/@kadirshairstyle/video/7675820922569395489',
-  'https://www.tiktok.com/@kadirshairstyle/video/7503917319857442070',
-  'https://www.tiktok.com/@kadirshairstyle/video/7688478926976584993',
-  'https://www.tiktok.com/@kadirshairstyle/video/7666880674288274720',
+  '/videos/werk-1.mp4',
+  '/videos/werk-2.mp4',
+  '/videos/werk-3.mp4',
+  '/videos/werk-4.mp4',
 ];
 
 export function fullAddress() {
