@@ -1,18 +1,22 @@
 import type { Metadata, Viewport } from 'next';
-import { Playfair_Display, Poppins } from 'next/font/google';
 import localFont from 'next/font/local';
 import { site } from '@/content/site';
 import './globals.css';
 
-const playfair = Playfair_Display({
-  subsets: ['latin'],
-  weight: ['500', '600', '700'],
-  style: ['normal', 'italic'],
+// Alle lettertypes lokaal meegeleverd (OFL), zodat de build niet afhangt van Google Fonts.
+const playfair = localFont({
+  src: [
+    { path: './fonts/playfair-display-latin-500-normal.woff2', weight: '500', style: 'normal' },
+    { path: './fonts/playfair-display-latin-600-normal.woff2', weight: '600', style: 'normal' },
+    { path: './fonts/playfair-display-latin-700-normal.woff2', weight: '700', style: 'normal' },
+    { path: './fonts/playfair-display-latin-500-italic.woff2', weight: '500', style: 'italic' },
+    { path: './fonts/playfair-display-latin-600-italic.woff2', weight: '600', style: 'italic' },
+    { path: './fonts/playfair-display-latin-700-italic.woff2', weight: '700', style: 'italic' },
+  ],
   variable: '--font-playfair',
   display: 'swap',
 });
 
-// Lokaal meegeleverd (OFL), zodat de build niet afhangt van Google Fonts.
 const jost = localFont({
   src: [
     { path: './fonts/jost-latin-400-normal.woff2', weight: '400', style: 'normal' },
@@ -22,9 +26,13 @@ const jost = localFont({
   display: 'swap',
 });
 
-const poppins = Poppins({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600'],
+const poppins = localFont({
+  src: [
+    { path: './fonts/poppins-latin-300-normal.woff2', weight: '300', style: 'normal' },
+    { path: './fonts/poppins-latin-400-normal.woff2', weight: '400', style: 'normal' },
+    { path: './fonts/poppins-latin-500-normal.woff2', weight: '500', style: 'normal' },
+    { path: './fonts/poppins-latin-600-normal.woff2', weight: '600', style: 'normal' },
+  ],
   variable: '--font-poppins',
   display: 'swap',
 });

@@ -11,23 +11,25 @@ export function Footer() {
       <div className="container footer-inner">
         <div className="footer-start">
           <Brand className="brand-footer" tone="light" />
-          <p>
+        </div>
+        <div className="footer-center">
+          <p className="footer-copy">
             &copy; {year} {site.name} {site.city}. Alle rechten voorbehouden.
           </p>
+          <span className="powered-by">
+            Powered by
+            <a
+              href="https://www.axaweb.nl"
+              target="_blank"
+              rel="noopener"
+              aria-label="AxaWeb (opent in nieuw tabblad)"
+              title="Website door AxaWeb"
+              className="powered-by-link"
+            >
+              <Image src={axawebIcon} alt="AxaWeb" width={22} height={22} />
+            </a>
+          </span>
         </div>
-        <span className="powered-by">
-          Powered by
-          <a
-            href="https://www.axaweb.nl"
-            target="_blank"
-            rel="noopener"
-            aria-label="AxaWeb (opent in nieuw tabblad)"
-            title="Website door AxaWeb"
-            className="powered-by-link"
-          >
-            <Image src={axawebIcon} alt="AxaWeb" width={22} height={22} />
-          </a>
-        </span>
         <nav className="footer-links" aria-label="Footer">
           <a href="/privacy">Privacy</a>
           {site.instagram && (

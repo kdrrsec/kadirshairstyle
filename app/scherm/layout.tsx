@@ -1,8 +1,13 @@
 import type { Metadata } from 'next';
-import { Bebas_Neue } from 'next/font/google';
+import localFont from 'next/font/local';
 
 // Strakke, hoge display-letter die past bij het stencil-logo; goed leesbaar op afstand.
-const tv = Bebas_Neue({ subsets: ['latin'], weight: '400', variable: '--font-tv', display: 'swap' });
+const tv = localFont({
+  src: '../fonts/bebas-neue-latin-400-normal.woff2',
+  weight: '400',
+  variable: '--font-tv',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: 'Wachtrij',
