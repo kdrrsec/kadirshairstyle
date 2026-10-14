@@ -102,6 +102,14 @@ Werking: AxaWeb Meldingen stuurt berichten van `WHATSAPP_PHONE` (ondertekend met
 `WHATSAPP_WEBHOOK_SECRET`) naar `/api/whatsapp`; het antwoord gaat via WhatsApp terug.
 De woorden voor diensten staan bij `aliases` in `content/site.ts`.
 
+## Domein
+
+Het echte adres is **https://www.kadirshairstyle.nl** (`site.url` in `content/site.ts`);
+`kadirshairstyle.nl` stuurt via Vercel door naar www. De oude adressen
+(`kadirshairstyle.axaweb.nl`, `kadirshairstyle.vercel.app`) sturen bezoekers via
+`proxy.ts` door naar het echte domein, behalve `/api/*`, zodat de WhatsApp-koppeling
+en de cron blijven werken. De QR-code op het TV-scherm wijst altijd naar `site.url`.
+
 ## Schakelaar "We gaan binnenkort live"
 
 Zet in Vercel (Settings → Environment Variables) `COMING_SOON` op `1` en

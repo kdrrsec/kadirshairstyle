@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useCallback, useEffect, useState } from 'react';
 import QRCode from 'qrcode';
 import logoLight from '@/public/logo-light.png';
+import { site } from '@/content/site';
 
 type Item = { id: number; name: string; time: string; startIso: string; endIso: string };
 
@@ -60,7 +61,7 @@ export default function SchermPage() {
 
   // QR-code naar de boekpagina
   useEffect(() => {
-    QRCode.toString(`${window.location.origin}/afspraak`, {
+    QRCode.toString(`${site.url}/afspraak`, {
       type: 'svg',
       margin: 0,
       color: { dark: '#1b1c1e', light: '#f5f2ec' },
