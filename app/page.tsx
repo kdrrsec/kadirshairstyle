@@ -6,8 +6,8 @@ import { Navbar } from '@/components/Navbar';
 import { SocialVideos } from '@/components/SocialVideos';
 import { StructuredData } from '@/components/StructuredData';
 import { heroImage } from '@/content/images';
-import aboutFade from '@/public/over-ons-fade.jpg';
-import aboutDetail from '@/public/over-ons-detail.jpg';
+import logoLight from '@/public/logo-light.png';
+import { HandHeart, Scissors, Sparkles } from 'lucide-react';
 import { BOOKING_HREF, dayLabels, fullAddress, site, treatments, type DayKey } from '@/content/site';
 import { CtaInner } from '@/components/CtaInner';
 
@@ -75,28 +75,42 @@ export default function Home() {
         <section className="section" id="over-ons">
           <div className="container split">
             <div className="split-media">
-              <div className="about-collage">
-                <Image
-                  src={aboutFade}
-                  alt="Strakke skin fade bij Kadir's Hairstyle in Zutphen"
-                  className="about-main"
-                  sizes="(max-width: 860px) 320px, 480px"
-                  quality={80}
-                />
-                <div className="about-inset">
-                  <Image
-                    src={aboutDetail}
-                    alt="Blonde coupe met fade, net geknipt bij Kadir's Hairstyle"
-                    sizes="(max-width: 860px) 150px, 230px"
-                    quality={80}
-                  />
-                </div>
-                <span className="about-badge">Herenkapper · {site.city}</span>
+              <div className="about-panel">
+                <Image src={logoLight} alt="" className="about-panel-logo" sizes="260px" />
+                <ul className="about-values">
+                  <li>
+                    <span className="about-value-icon">
+                      <HandHeart size={20} strokeWidth={1.6} aria-hidden="true" />
+                    </span>
+                    <span>
+                      <strong>Service</strong>
+                      Persoonlijk advies en de tijd voor jou, elke afspraak opnieuw.
+                    </span>
+                  </li>
+                  <li>
+                    <span className="about-value-icon">
+                      <Scissors size={20} strokeWidth={1.6} aria-hidden="true" />
+                    </span>
+                    <span>
+                      <strong>Quality</strong>
+                      Strakke fades, scherpe lijnen en een coupe die blijft zitten.
+                    </span>
+                  </li>
+                  <li>
+                    <span className="about-value-icon">
+                      <Sparkles size={20} strokeWidth={1.6} aria-hidden="true" />
+                    </span>
+                    <span>
+                      <strong>Good vibes</strong>
+                      Een ontspannen sfeer waar je graag even binnenloopt.
+                    </span>
+                  </li>
+                </ul>
               </div>
             </div>
             <div className="split-text">
               <p className="eyebrow">Over ons</p>
-              <h2>Vakmanschap met een persoonlijke touch</h2>
+              <h2>Meer dan een knipbeurt</h2>
               <p>
                 {site.name} is dé herenkapper in {site.city} voor mannen die een kapsel willen dat echt bij hen past.
                 Met oog voor de laatste trends en persoonlijke aandacht zorgen wij voor een resultaat waarmee je met
