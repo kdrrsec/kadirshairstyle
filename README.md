@@ -102,6 +102,17 @@ Werking: AxaWeb Meldingen stuurt berichten van `WHATSAPP_PHONE` (ondertekend met
 `WHATSAPP_WEBHOOK_SECRET`) naar `/api/whatsapp`; het antwoord gaat via WhatsApp terug.
 De woorden voor diensten staan bij `aliases` in `content/site.ts`.
 
+## Schakelaar "We gaan binnenkort live"
+
+Zet in Vercel (Settings → Environment Variables) `COMING_SOON` op `1` en
+redeploy: elke bezoeker ziet dan op elke pagina de pagina `/binnenkort`. Zet
+hem op `0` (en redeploy) om de site live te zetten.
+
+Zelf de echte site bekijken terwijl de schakelaar aan staat: open één keer
+`https://<domein>/?voorbeeld=<COMING_SOON_SECRET>`. Dat zet een cookie voor 90
+dagen. Met `?voorbeeld=uit` haal je die weer weg. `/admin`, `/scherm`,
+`/privacy` en de API blijven altijd bereikbaar. De logica staat in `proxy.ts`.
+
 ## Lokaal draaien
 
 ```bash
