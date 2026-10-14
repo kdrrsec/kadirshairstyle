@@ -6,6 +6,8 @@ import { Navbar } from '@/components/Navbar';
 import { SocialVideos } from '@/components/SocialVideos';
 import { StructuredData } from '@/components/StructuredData';
 import { heroImage } from '@/content/images';
+import aboutFade from '@/public/over-ons-fade.jpg';
+import aboutDetail from '@/public/over-ons-detail.jpg';
 import { BOOKING_HREF, dayLabels, fullAddress, site, treatments, type DayKey } from '@/content/site';
 import { CtaInner } from '@/components/CtaInner';
 
@@ -72,29 +74,24 @@ export default function Home() {
 
         <section className="section" id="over-ons">
           <div className="container split">
-            <div className="split-media" aria-hidden="true">
-              <div className="media-frame">
-                <svg viewBox="0 0 200 200" className="scissors-art">
-                  <circle cx="100" cy="100" r="96" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.35" />
-                  <g transform="translate(100 100)">
-                    <path
-                      d="M-40 -35 L15 20 M-40 35 L15 -20"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                      strokeLinecap="round"
-                      fill="none"
-                    />
-                    <circle cx="-45" cy="-35" r="9" fill="none" stroke="currentColor" strokeWidth="4" />
-                    <circle cx="-45" cy="35" r="9" fill="none" stroke="currentColor" strokeWidth="4" />
-                    <path
-                      d="M15 20 L45 30 M15 -20 L45 -30"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                      strokeLinecap="round"
-                      fill="none"
-                    />
-                  </g>
-                </svg>
+            <div className="split-media">
+              <div className="about-collage">
+                <Image
+                  src={aboutFade}
+                  alt="Strakke skin fade bij Kadir's Hairstyle in Zutphen"
+                  className="about-main"
+                  sizes="(max-width: 860px) 320px, 480px"
+                  quality={80}
+                />
+                <div className="about-inset">
+                  <Image
+                    src={aboutDetail}
+                    alt="Blonde coupe met fade, net geknipt bij Kadir's Hairstyle"
+                    sizes="(max-width: 860px) 150px, 230px"
+                    quality={80}
+                  />
+                </div>
+                <span className="about-badge">Herenkapper · {site.city}</span>
               </div>
             </div>
             <div className="split-text">
