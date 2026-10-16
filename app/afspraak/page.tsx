@@ -21,6 +21,12 @@ type StepKey = 'service' | 'time' | 'details' | 'done';
 const TZ = 'Europe/Amsterdam';
 const WEEKDAY_KEYS: DayKey[] = ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za'];
 
+function addMinutes(time: string, minutes: number) {
+  const [h, m] = time.split(':').map(Number);
+  const total = h * 60 + m + minutes;
+  return `${String(Math.floor(total / 60)).padStart(2, '0')}:${String(total % 60).padStart(2, '0')}`;
+}
+
 function formatEuro(value: number) {
   const whole = Number.isInteger(value);
   return new Intl.NumberFormat('nl-NL', { minimumFractionDigits: whole ? 0 : 2, maximumFractionDigits: 2 }).format(value);
@@ -248,6 +254,7 @@ export default function AfspraakPage() {
                     >
                       {treatmentId === t.id && <span className="service-check">✓</span>}
                       <span className="service-name">{t.name}</span>
+                      <span className="service-meta">{t.duration_minutes} min</span>
                       <span className="service-price">{formatPrice(t.price_from)}</span>
                     </button>
                   ))}
@@ -411,7 +418,7 @@ export default function AfspraakPage() {
                   <div className="order-line-name">{selectedTreatment.name}</div>
                   {time && (
                     <div className="order-line-meta">
-                      {formatDateLabel(selectedDate)} · {time}
+                      {formatDateLabel(selectedDate)} · {time}–{addMinutes(time, selectedTreatment.duration_minutes)}
                     </div>
                   )}
                 </div>

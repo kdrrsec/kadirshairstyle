@@ -33,7 +33,7 @@ function serialize(r: Row) {
     endIso: new Date(r.end_time).toISOString(),
     treatmentId: r.treatment_id,
     treatment: r.treatment_name,
-    duration: r.duration_minutes,
+    duration: Math.round((new Date(r.end_time).getTime() - new Date(r.start_time).getTime()) / 60000),
   };
 }
 

@@ -94,7 +94,7 @@ export const treatments = [
     name: 'Knippen & baard',
     aliases: ['knippen baard', 'knip baard', 'knippen + baard', 'knippen en baard'],
     description: 'Knippen en je baard in model, samen in één afspraak.',
-    durationMinutes: 30,
+    durationMinutes: 40,
     priceFrom: 30 as number | null,
   },
   {
@@ -112,7 +112,7 @@ export const treatments = [
     name: 'Baard modelleren',
     aliases: ['baard', 'baard trimmen', 'trimmen'],
     description: 'Je baard strak in model, met scherpe lijnen en de juiste lengte.',
-    durationMinutes: 30,
+    durationMinutes: 20,
     priceFrom: 15 as number | null,
   },
 ];

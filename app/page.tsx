@@ -147,8 +147,8 @@ export default function Home() {
               <p className="eyebrow">Diensten</p>
               <h2>Waar wij je mee kunnen helpen</h2>
               <p className="svc2-intro">
-                Van een frisse coupe tot een strak gemodelleerde baard. Elke afspraak duurt 30 minuten: kies je dienst
-                en plan direct online een moment dat jou uitkomt.
+                Van een frisse coupe tot een strak gemodelleerde baard. Kies je dienst en plan direct online een
+                moment dat jou uitkomt.
               </p>
 
               <ol className="svc2-list">
@@ -164,7 +164,10 @@ export default function Home() {
                       ))}
                     </span>
                     <span className="svc2-desc">{t.description}</span>
-                    {t.priceFrom !== null && <span className="svc2-price">€{formatEuro(t.priceFrom)}</span>}
+                    <span className="svc2-price">
+                      {t.priceFrom !== null && <span>€{formatEuro(t.priceFrom)}</span>}
+                      <span className="svc2-dur">{t.durationMinutes} min</span>
+                    </span>
                   </li>
                 ))}
               </ol>

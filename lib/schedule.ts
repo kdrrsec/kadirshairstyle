@@ -5,7 +5,12 @@ const TIMEZONE = 'Europe/Amsterdam';
 // 0 = zondag ... 6 = zaterdag
 const WEEKDAY_KEYS: DayKey[] = ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za'];
 
-const SLOT_STEP_MINUTES = 30; // afspraken van 30 min, starttijden op het hele en halve uur
+// Starttijden: elk heel en half uur, plus direct aansluitend op (of vlak vóór) een
+// bestaande afspraak of blokkade. Zo ontstaan er geen gaten in de agenda als
+// diensten verschillend lang duren (20, 30 of 40 min), en blijft de lijst kort.
+const SLOT_STEP_MINUTES = 30;
+// Fijnste raster waarop een starttijd mag vallen (WhatsApp/beheer kunnen ook 11:15 plannen).
+const TIME_GRID_MINUTES = 5;
 const MIN_LEAD_MINUTES = 30;
 
 export type Interval = { start: Date; end: Date };
@@ -79,11 +84,19 @@ export function computeAvailableSlots(
   const openMin = timeStrToMinutes(hours.open);
   const closeMin = timeStrToMinutes(hours.close);
 
+  const candidates = new Set<number>();
+  for (let m = openMin; m < closeMin; m += SLOT_STEP_MINUTES) candidates.add(m);
+  for (const b of busyIntervals) {
+    const end = toAmsterdamParts(b.end);
+    if (end.date === dateStr) candidates.add(timeStrToMinutes(end.time));
+    const start = toAmsterdamParts(b.start);
+    if (start.date === dateStr) candidates.add(timeStrToMinutes(start.time) - durationMinutes);
+  }
+
   const slots: string[] = [];
-  for (let m = openMin; m + durationMinutes <= closeMin; m += SLOT_STEP_MINUTES) {
-    const hh = String(Math.floor(m / 60)).padStart(2, '0');
-    const mm = String(m % 60).padStart(2, '0');
-    const timeStr = `${hh}:${mm}`;
+  for (const m of [...candidates].sort((a, b) => a - b)) {
+    if (m < openMin || m + durationMinutes > closeMin || m % TIME_GRID_MINUTES !== 0) continue;
+    const timeStr = minutesToTimeStr(m);
     const start = localToUTC(dateStr, timeStr);
     const end = new Date(start.getTime() + durationMinutes * 60000);
 
@@ -97,7 +110,19 @@ export function computeAvailableSlots(
   return slots;
 }
 
-/** Controleert of een tijd binnen openingstijden en het slotraster valt. */
+function minutesToTimeStr(m: number) {
+  return `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
+}
+
+/**
+ * Controleert of een tijd binnen de openingstijden en het tijdraster valt.
+ * Overlap met andere afspraken wordt apart (binnen een lock) gecontroleerd.
+ */
 export function isBookableTime(dateStr: string, timeStr: string, durationMinutes: number, now = new Date()) {
-  return computeAvailableSlots(dateStr, durationMinutes, [], now).includes(timeStr);
+  const hours = hoursForDate(dateStr);
+  if (!hours || !/^\d{2}:\d{2}$/.test(timeStr)) return false;
+  const m = timeStrToMinutes(timeStr);
+  if (m % TIME_GRID_MINUTES !== 0) return false;
+  if (m < timeStrToMinutes(hours.open) || m + durationMinutes > timeStrToMinutes(hours.close)) return false;
+  return localToUTC(dateStr, timeStr).getTime() >= now.getTime() + MIN_LEAD_MINUTES * 60000;
 }
