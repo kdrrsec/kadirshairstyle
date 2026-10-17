@@ -118,17 +118,6 @@ Het echte adres is **https://www.kadirshairstyle.nl** (`site.url` in `content/si
 `proxy.ts` door naar het echte domein, behalve `/api/*`, zodat de WhatsApp-koppeling
 en de cron blijven werken. De QR-code op het TV-scherm wijst altijd naar `site.url`.
 
-## Schakelaar "We gaan binnenkort live"
-
-Zet in Vercel (Settings → Environment Variables) `COMING_SOON` op `1` en
-redeploy: elke bezoeker ziet dan op elke pagina de pagina `/binnenkort`. Zet
-hem op `0` (en redeploy) om de site live te zetten.
-
-Zelf de echte site bekijken terwijl de schakelaar aan staat: open één keer
-`https://<domein>/?voorbeeld=<COMING_SOON_SECRET>`. Dat zet een cookie voor 90
-dagen. Met `?voorbeeld=uit` haal je die weer weg. `/admin`, `/scherm`,
-`/privacy` en de API blijven altijd bereikbaar. De logica staat in `proxy.ts`.
-
 ## Lokaal draaien
 
 ```bash
