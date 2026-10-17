@@ -185,6 +185,34 @@ function treatmentList(treatments: readonly TreatmentRef[]) {
   return treatments.map((t) => `• ${t.name}`).join('\n');
 }
 
+/** "10 uur", "10u" of "om 10" → 10:00. */
+function hourOnly(tokens: string[], i: number) {
+  const t = clean(tokens[i] || '');
+  if (!/^\d{1,2}$/.test(t)) return null;
+  const h = Number(t);
+  if (h < 6 || h > 22) return null;
+  const nextWord = clean(tokens[i + 1] || '');
+  const prevWord = clean(tokens[i - 1] || '');
+  if (nextWord === 'uur' || nextWord === 'u' || prevWord === 'om') return `${pad(h)}:00`;
+  return null;
+}
+
+/** Bevat het bericht zowel een datum als een tijd? */
+function looksLikeBooking(tokens: string[], today: string) {
+  let hasDate = false;
+  let hasTime = false;
+  for (let k = 0; k < tokens.length; k++) {
+    const d = takeDate(tokens, k, today);
+    if (d) {
+      hasDate = true;
+      k = d.next - 1;
+      continue;
+    }
+    if (parseTime(tokens[k]) || hourOnly(tokens, k)) hasTime = true;
+  }
+  return hasDate && hasTime;
+}
+
 function isPhoneToken(t: string) {
   return /^\+?\d[\d-]{8,}$/.test(t.replace(/[()]/g, ''));
 }
@@ -205,6 +233,11 @@ export function parseCommand(text: string, today: string, treatments: readonly T
   if (!kind) {
     const d = takeDate(tokens, 0, today);
     if (d && d.next === tokens.length) return { kind: 'agenda', date: d.date };
+  }
+  if (!kind && looksLikeBooking(tokens, today)) {
+    // "morgen 11:00 Jan knippen" zonder AFSPRAAK ervoor: ook gewoon inplannen.
+    kind = 'book';
+    i = 0;
   }
   if (!kind) {
     // Geen bekend commando. Staat er een datum of tijd in, dan was het waarschijnlijk een poging: uitleg terug.
@@ -287,7 +320,7 @@ export function parseCommand(text: string, today: string, treatments: readonly T
       }
     }
     if (!time) {
-      const t = parseTime(tokens[i] || '');
+      const t = parseTime(tokens[i] || '') || hourOnly(tokens, i);
       if (t) {
         time = t;
         i++;
@@ -316,10 +349,10 @@ export function parseCommand(text: string, today: string, treatments: readonly T
     }
   }
 
-  // Behandeling = de laatste 1-3 woorden
+  // Behandeling = de laatste 1-3 woorden, of anders de eerste 1-3 woorden ("knippen Jan").
   let treatment: TreatmentRef | null = null;
   let nameTokens = rest;
-  for (let k = Math.min(3, rest.length - 1); k >= 1; k--) {
+  for (let k = Math.min(3, rest.length); k >= 1; k--) {
     const found = findTreatment(rest.slice(-k).join(' '), treatments);
     if (found) {
       treatment = found;
@@ -327,12 +360,30 @@ export function parseCommand(text: string, today: string, treatments: readonly T
       break;
     }
   }
+  if (!treatment) {
+    for (let k = Math.min(3, rest.length); k >= 1; k--) {
+      const found = findTreatment(rest.slice(0, k).join(' '), treatments);
+      if (found) {
+        treatment = found;
+        nameTokens = rest.slice(k);
+        break;
+      }
+    }
+  }
   if (!treatment && treatments.length === 1) treatment = treatments[0];
   if (!treatment) {
-    return { kind: 'error', message: `Welke behandeling? Zet hem achter de naam. Kies uit:\n${treatmentList(treatments)}\n\n${usage}` };
+    return { kind: 'error', message: `Welke behandeling? Kies uit:\n${treatmentList(treatments)}\n\n${usage}` };
   }
-  const name = nameTokens.join(' ').replace(/[,;:]+$/, '').trim();
-  if (!/\p{L}/u.test(name)) return { kind: 'error', message: `Voor wie is de afspraak? ${usage}` };
+  // Alleen opvulwoorden vóóraan weghalen ("voor Jan"), zodat "van Dijk" heel blijft.
+  let start = 0;
+  while (start < nameTokens.length && FILLER.has(clean(nameTokens[start]))) start++;
+  const typed = nameTokens
+    .slice(start)
+    .join(' ')
+    .replace(/[,;:]+$/, '')
+    .trim();
+  // Zonder naam toch inplannen; de kapper ziet het dan als "Klant" in de agenda.
+  const name = /\p{L}/u.test(typed) ? typed : 'Klant';
 
   return { kind: 'book', date, time, name: name.slice(0, 120), treatment: treatment.slug, phone };
 }
