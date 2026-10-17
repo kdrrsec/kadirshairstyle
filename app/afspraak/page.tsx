@@ -40,18 +40,21 @@ function toDateStr(d: Date) {
   return new Intl.DateTimeFormat('en-CA', { timeZone: TZ }).format(d);
 }
 
+/**
+ * De komende `count` kalenderdagen vanaf vandaag (Amsterdamse tijd). Er wordt per
+ * kalenderdag geteld, niet per 24 uur, zodat de wissel naar zomer-/wintertijd geen
+ * dag dubbel laat zien of overslaat.
+ */
 function buildDays(count: number) {
+  const [ty, tm, td] = toDateStr(new Date()).split('-').map(Number);
   const days = [];
   for (let i = 0; i < count; i++) {
-    const d = new Date(Date.now() + i * 24 * 60 * 60 * 1000);
-    const dateStr = toDateStr(d);
-    const [y, m, day] = dateStr.split('-').map(Number);
-    const weekday = new Date(Date.UTC(y, m - 1, day, 12)).getUTCDay();
+    const d = new Date(Date.UTC(ty, tm - 1, td + i, 12));
     days.push({
-      dateStr,
-      dayNum: new Intl.DateTimeFormat('nl-NL', { timeZone: TZ, day: 'numeric' }).format(d),
-      weekday: new Intl.DateTimeFormat('nl-NL', { timeZone: TZ, weekday: 'short' }).format(d).toUpperCase(),
-      closed: !site.hours[WEEKDAY_KEYS[weekday]],
+      dateStr: d.toISOString().slice(0, 10),
+      dayNum: String(d.getUTCDate()),
+      weekday: new Intl.DateTimeFormat('nl-NL', { timeZone: 'UTC', weekday: 'short' }).format(d).toUpperCase(),
+      closed: !site.hours[WEEKDAY_KEYS[d.getUTCDay()]],
     });
   }
   return days;
