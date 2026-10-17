@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { CalendarClock, History, LogOut, MessageCircle, Monitor, Phone, RefreshCw, Trash2, X } from 'lucide-react';
+import { CalendarClock, History, List, LogOut, MessageCircle, Monitor, Phone, RefreshCw, Trash2, X } from 'lucide-react';
 import logoLight from '@/public/logo-compact-light.png';
 
 type Appointment = {
@@ -70,6 +70,7 @@ export function AdminDashboard() {
   const [rescheduling, setRescheduling] = useState<Appointment | null>(null);
   const [deleting, setDeleting] = useState<Appointment | null>(null);
   const [showLog, setShowLog] = useState(false);
+  const [showAll, setShowAll] = useState(false);
 
   const load = useCallback(async () => {
     setLoadError('');
@@ -161,6 +162,10 @@ export function AdminDashboard() {
             >
               <MessageCircle size={16} strokeWidth={1.7} aria-hidden="true" />
               <span>{sendingOverview ? 'Versturen…' : 'Dagoverzicht'}</span>
+            </button>
+            <button type="button" className="adm-top-link" onClick={() => setShowAll(true)} title="Alle afspraken, ook geannuleerde">
+              <List size={16} strokeWidth={1.7} aria-hidden="true" />
+              <span>Alle afspraken</span>
             </button>
             <button type="button" className="adm-top-link" onClick={() => setShowLog(true)} title="Alle wijzigingen in de agenda">
               <History size={16} strokeWidth={1.7} aria-hidden="true" />
@@ -290,6 +295,21 @@ export function AdminDashboard() {
         />
       )}
 
+      {showAll && (
+        <Dialog title="Alle afspraken" onClose={() => setShowAll(false)}>
+          <AllAppointments
+            onOpenDay={(d) => {
+              setShowAll(false);
+              selectDate(d);
+            }}
+            onRestored={(msg) => {
+              setToast(msg);
+              load();
+            }}
+          />
+        </Dialog>
+      )}
+
       {showLog && (
         <Dialog title="Logboek" onClose={() => setShowLog(false)}>
           <ActivityLog
@@ -347,6 +367,109 @@ function Dialog({ title, onClose, children }: { title: string; onClose: () => vo
         {children}
       </div>
     </div>
+  );
+}
+
+type ListedAppointment = {
+  id: number;
+  name: string;
+  phone: string;
+  treatment: string;
+  date: string;
+  time: string;
+  endTime: string;
+  startIso: string;
+  createdAt: string;
+  cancelled: boolean;
+};
+
+function AllAppointments({ onOpenDay, onRestored }: { onOpenDay: (date: string) => void; onRestored: (msg: string) => void }) {
+  const [items, setItems] = useState<ListedAppointment[] | null>(null);
+  const [error, setError] = useState('');
+  const [query, setQuery] = useState('');
+  const [busyId, setBusyId] = useState<number | null>(null);
+
+  const load = useCallback(async () => {
+    setError('');
+    try {
+      const res = await fetch('/api/admin/alle-afspraken', { cache: 'no-store' });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Afspraken konden niet worden geladen.');
+      setItems(data.appointments || []);
+    } catch (e) {
+      setError((e as Error).message);
+    }
+  }, []);
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  async function restore(a: ListedAppointment) {
+    setBusyId(a.id);
+    setError('');
+    const res = await fetch('/api/admin/appointments', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: a.id, restore: true }),
+    });
+    const data = await res.json().catch(() => ({}));
+    setBusyId(null);
+    if (!res.ok) {
+      setError(data.error || 'Terugzetten is niet gelukt.');
+      return;
+    }
+    onRestored(`Afspraak #${a.id} teruggezet`);
+    load();
+  }
+
+  if (error && !items) return <p className="adm-error">{error}</p>;
+  if (!items) return <p className="adm-muted">Laden…</p>;
+
+  const q = query.trim().toLowerCase().replace(/^#/, '');
+  const shown = q
+    ? items.filter((a) => String(a.id) === q || a.name.toLowerCase().includes(q) || a.phone.replace(/\s/g, '').includes(q.replace(/\s/g, '')))
+    : items;
+  const now = Date.now();
+
+  return (
+    <>
+      <input
+        type="search"
+        className="adm-search"
+        placeholder="Zoek op naam, telefoon of #nummer"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+      />
+      {error && <p className="adm-error">{error}</p>}
+      {shown.length === 0 && <p className="adm-muted">Geen afspraken gevonden.</p>}
+      <ol className="adm-log">
+        {shown.map((a) => (
+          <li key={a.id} className={`adm-log-item ${a.cancelled ? 'adm-log-geannuleerd' : 'adm-log-nieuw'}`}>
+            <div className="adm-log-meta">
+              <span className="adm-log-id">#{a.id}</span>
+              <span className="adm-log-time">gemaakt {logTime(a.createdAt)}</span>
+              {a.cancelled && <span className="adm-log-source">Geannuleerd</span>}
+            </div>
+            <p className="adm-log-text">
+              <strong>{a.name}</strong> – {a.treatment}
+              <br />
+              <button type="button" className="adm-link-btn" onClick={() => onOpenDay(a.date)}>
+                {longDate(a.date)} {a.time}–{a.endTime}
+              </button>
+            </p>
+            {a.cancelled && new Date(a.startIso).getTime() > now && (
+              <button type="button" className="adm-action" onClick={() => restore(a)} disabled={busyId === a.id}>
+                {busyId === a.id ? 'Bezig…' : 'Terugzetten'}
+              </button>
+            )}
+          </li>
+        ))}
+      </ol>
+      <p className="adm-muted adm-log-note">
+        Een nummer dat hier ontbreekt, is vóór 17 oktober in het beheer verwijderd en bestaat niet meer.
+      </p>
+    </>
   );
 }
 
