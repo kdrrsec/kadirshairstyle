@@ -51,6 +51,8 @@ export async function handleWhatsAppCommand(text: string, now = new Date()): Pro
       return agenda(cmd.date);
     case 'book':
       return book(cmd, treatments, now);
+    case 'ask-time':
+      return askTime(cmd, treatments, now);
     case 'block':
       return block(cmd);
     case 'unblock':
@@ -158,8 +160,8 @@ async function book(cmd: Extract<Command, { kind: 'book' }>, treatments: DbTreat
   }
 }
 
-/** Vrije tijden op die dag, het dichtst bij de gevraagde tijd. */
-async function freeTimesNear(date: string, time: string, duration: number, now: Date) {
+/** Alle vrije starttijden op die dag voor een behandeling van `duration` minuten. */
+async function freeSlots(date: string, duration: number, now: Date) {
   const { start, end } = dayBoundsUTC(date);
   const { rows: busy } = await pool.query(
     `SELECT start_time, end_time FROM appointments WHERE status != 'cancelled' AND start_time < $2 AND end_time > $1
@@ -167,17 +169,50 @@ async function freeTimesNear(date: string, time: string, duration: number, now: 
      SELECT start_time, end_time FROM blocked_slots WHERE start_time < $2 AND end_time > $1`,
     [start.toISOString(), end.toISOString()]
   );
-  const slots = computeAvailableSlots(
+  return computeAvailableSlots(
     date,
     duration,
     busy.map((r) => ({ start: new Date(r.start_time), end: new Date(r.end_time) })),
     now
   );
+}
+
+/** Vrije tijden op die dag, het dichtst bij de gevraagde tijd. */
+async function freeTimesNear(date: string, time: string, duration: number, now: Date) {
   const toMin = (t: string) => Number(t.slice(0, 2)) * 60 + Number(t.slice(3));
-  return slots
+  return (await freeSlots(date, duration, now))
     .sort((a, b) => Math.abs(toMin(a) - toMin(time)) - Math.abs(toMin(b) - toMin(time)))
     .slice(0, 4)
     .sort();
+}
+
+/** Afspraak zonder tijd: vrije tijden van die dag terugsturen, met een kant-en-klaar voorbeeld. */
+async function askTime(cmd: Extract<Command, { kind: 'ask-time' }>, treatments: DbTreatment[], now: Date) {
+  const treatment = treatments.find((t) => t.slug === cmd.treatment);
+  const duration = treatment?.duration ?? Math.min(...treatments.map((t) => t.duration));
+  const day = longDate(cmd.date).toLowerCase();
+  const dm = `${cmd.date.slice(8)}-${cmd.date.slice(5, 7)}`;
+
+  if (!hoursForDate(cmd.date)) return `🕐 Hoe laat? Let op: op ${day} is de salon gesloten.`;
+  const slots = await freeSlots(cmd.date, duration, now);
+  if (slots.length === 0) return `🕐 Op ${day} is geen tijd meer vrij${treatment ? ` voor ${treatment.name.toLowerCase()}` : ''}.`;
+
+  const example = [
+    'AFSPRAAK',
+    dm,
+    slots[0],
+    cmd.name || 'Naam',
+    treatment ? treatment.slug.replace(/-/g, ' ') : treatments[0]?.slug.replace(/-/g, ' '),
+    cmd.phone || '',
+  ]
+    .filter(Boolean)
+    .join(' ');
+  return [
+    `🕐 *Hoe laat?* Vrij op ${day}${treatment ? ` (${treatment.name.toLowerCase()}, ${treatment.duration} min)` : ''}:`,
+    slots.join(', '),
+    '',
+    `Stuur bijvoorbeeld: *${example}*`,
+  ].join('\n');
 }
 
 function daysBetween(from: string, to: string) {

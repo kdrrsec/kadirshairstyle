@@ -18,6 +18,7 @@ export type Command =
   | { kind: 'block'; from: string; to: string; startTime?: string; endTime?: string; reason?: string }
   | { kind: 'unblock'; from: string; to: string }
   | { kind: 'book'; date: string; time: string; name: string; treatment: string; phone?: string }
+  | { kind: 'ask-time'; date: string; name: string; treatment?: string; phone?: string }
   | { kind: 'cancel'; id: number }
   | { kind: 'error'; message: string }
   | { kind: 'none' };
@@ -330,7 +331,7 @@ export function parseCommand(text: string, today: string, treatments: readonly T
   skipFiller(AFTER_TIME);
   const usage = 'Bijvoorbeeld: *AFSPRAAK 11-11 11:15 Jan Jansen knippen*';
   if (!date) return { kind: 'error', message: `Welke dag? ${usage}` };
-  if (!time) return { kind: 'error', message: `Hoe laat? ${usage}` };
+  // Zonder tijd: niet inplannen maar de vrije tijden van die dag terugsturen (zie whatsapp-commands).
 
   let rest = tokens.slice(i);
   // Telefoonnummer (los of als "06 12345678") eruit halen
@@ -371,6 +372,12 @@ export function parseCommand(text: string, today: string, treatments: readonly T
     }
   }
   if (!treatment && treatments.length === 1) treatment = treatments[0];
+  if (!time) {
+    let first = 0;
+    while (first < nameTokens.length && FILLER.has(clean(nameTokens[first]))) first++;
+    const who = nameTokens.slice(first).join(' ').replace(/[,;:]+$/, '').trim();
+    return { kind: 'ask-time', date, name: /\p{L}/u.test(who) ? who.slice(0, 120) : '', treatment: treatment?.slug, phone };
+  }
   if (!treatment) {
     return { kind: 'error', message: `Welke behandeling? Kies uit:\n${treatmentList(treatments)}\n\n${usage}` };
   }
