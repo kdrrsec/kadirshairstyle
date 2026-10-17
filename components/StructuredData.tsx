@@ -11,13 +11,29 @@ const SCHEMA_DAYS: Record<DayKey, string> = {
   zo: 'Sunday',
 };
 
+/** Andere schrijfwijzen van de naam, zodat Google ze aan dezelfde zaak koppelt. */
+const ALTERNATE_NAMES = ['Kadirshairstyle', 'Kadirs Hairstyle', 'Kadir Hairstyle', "Kadir's Hairstyle Zutphen"];
+
 /** HairSalon / LocalBusiness structured data. Onbekende gegevens worden weggelaten. */
 export function StructuredData() {
+  // WebSite: bepaalt de sitenaam die Google boven het zoekresultaat toont.
+  const website = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': `${site.url}/#website`,
+    name: site.name,
+    alternateName: ALTERNATE_NAMES,
+    url: site.url,
+    inLanguage: 'nl-NL',
+    publisher: { '@id': `${site.url}/#salon` },
+  };
+
   const data: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'HairSalon',
     '@id': `${site.url}/#salon`,
     name: site.name,
+    alternateName: ALTERNATE_NAMES,
     url: site.url,
     image: [`${site.url}${heroImage.src}`],
     logo: `${site.url}/logo.png`,
@@ -67,7 +83,7 @@ export function StructuredData() {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data).replace(/</g, '\\u003c') }}
+      dangerouslySetInnerHTML={{ __html: JSON.stringify([website, data]).replace(/</g, '\\u003c') }}
     />
   );
 }

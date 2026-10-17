@@ -52,6 +52,8 @@ export const metadata: Metadata = {
     'kapper Zutphen',
     'kapsalon Zutphen',
     "Kadir's Hairstyle Zutphen",
+    'Kadirshairstyle',
+    'Kadirs Hairstyle',
     'haarstylist Zutphen',
     'knippen Zutphen',
     'herenkapper Zutphen',
