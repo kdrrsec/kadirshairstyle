@@ -28,6 +28,15 @@ function validSignature(body: string, timestamp: string | null, signature: strin
   return a.length === b.length && timingSafeEqual(a, b);
 }
 
+/** Alleen de hostnaam van de database (geen wachtwoord), om te zien welke database antwoordt. */
+function dbHost() {
+  try {
+    return new URL(process.env.DATABASE_URL || process.env.POSTGRES_URL || '').host;
+  } catch {
+    return 'onbekend';
+  }
+}
+
 function allowedNumbers() {
   const list = process.env.WHATSAPP_BEHEER_NUMMERS || process.env.WHATSAPP_PHONE || '';
   return list
@@ -53,6 +62,7 @@ export async function POST(request: Request) {
   }
   // Alleen de kapper zelf mag de agenda beheren.
   if (!allowedNumbers().includes(digits(data.from))) {
+    console.info('WhatsApp-bericht genegeerd: nummer heeft geen toegang');
     return NextResponse.json({ reply: null });
   }
 
@@ -63,6 +73,12 @@ export async function POST(request: Request) {
 
   try {
     const reply = await handleWhatsAppCommand(data.text.slice(0, 1000));
+    console.info('WhatsApp-commando', {
+      command: data.text.trim().split(/\s+/)[0]?.toUpperCase().slice(0, 20),
+      result: (reply || '').split('\n')[0].slice(0, 80),
+      db: dbHost(),
+      deployment: process.env.VERCEL_DEPLOYMENT_ID || 'lokaal',
+    });
     return NextResponse.json({ reply });
   } catch (err) {
     console.error('WhatsApp-commando mislukt:', err);
