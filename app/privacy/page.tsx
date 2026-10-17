@@ -63,8 +63,9 @@ export default function PrivacyPage() {
 
           <h2>Hoe lang bewaren we je gegevens?</h2>
           <p>
-            Afspraken worden <strong>6 maanden na de afspraakdatum automatisch gewist</strong>. Een afspraak die je laat
-            verwijderen, is direct weg.
+            Afspraken worden <strong>6 maanden na de afspraakdatum automatisch gewist</strong>. Wijzigingen in de agenda
+            (zoals een geannuleerde afspraak) staan tot die tijd in ons logboek, zodat we kunnen nagaan wat er is
+            gebeurd. Wil je dat je gegevens eerder worden gewist? Laat het ons weten, dan doen we dat.
           </p>
 
           <h2>Wie verwerkt je gegevens voor ons?</h2>

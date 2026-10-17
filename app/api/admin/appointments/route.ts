@@ -3,6 +3,7 @@ import { pool, ensureSchema } from '@/lib/db';
 import { localToUTC, toAmsterdamParts, dayBoundsUTC } from '@/lib/schedule';
 import { DATE_RE, TIME_RE } from '@/lib/api';
 import { addDays, guardAdmin } from '@/lib/admin';
+import { appointmentSummary, logActivity } from '@/lib/activity';
 
 export const dynamic = 'force-dynamic';
 
@@ -68,6 +69,7 @@ export async function PATCH(request: NextRequest) {
 
   const body = await request.json().catch(() => null);
   const id = Number(body?.id);
+  if (id && body?.restore === true) return restore(id);
   const date = body?.date;
   const time = body?.time;
   if (!id || typeof date !== 'string' || typeof time !== 'string' || !DATE_RE.test(date) || !TIME_RE.test(time)) {
@@ -79,7 +81,7 @@ export async function PATCH(request: NextRequest) {
     await client.query('BEGIN');
     await client.query('LOCK TABLE appointments IN SHARE ROW EXCLUSIVE MODE');
     const { rows: current } = await client.query(
-      `SELECT a.id, t.duration_minutes FROM appointments a
+      `SELECT a.id, a.customer_name, a.start_time, t.name AS treatment_name, t.duration_minutes FROM appointments a
        JOIN treatments t ON t.id = a.treatment_id
        WHERE a.id = $1 AND a.status != 'cancelled'`,
       [id]
@@ -112,6 +114,9 @@ export async function PATCH(request: NextRequest) {
       end.toISOString(),
     ]);
     await client.query('COMMIT');
+    const c = current[0];
+    const to = appointmentSummary(c.customer_name, c.treatment_name, start).split(' · ')[1];
+    await logActivity('beheer', 'verzet', `${appointmentSummary(c.customer_name, c.treatment_name, c.start_time)} → ${to}`, id);
     return NextResponse.json({ ok: true });
   } catch (err) {
     await client.query('ROLLBACK');
@@ -121,7 +126,52 @@ export async function PATCH(request: NextRequest) {
   }
 }
 
-/** Afspraak definitief verwijderen. */
+/** Een verwijderde afspraak terugzetten, als de tijd nog vrij is. */
+async function restore(id: number) {
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    await client.query('LOCK TABLE appointments IN SHARE ROW EXCLUSIVE MODE');
+    const { rows } = await client.query(
+      `SELECT a.customer_name, a.start_time, a.end_time, t.name AS treatment_name FROM appointments a
+       JOIN treatments t ON t.id = a.treatment_id WHERE a.id = $1 AND a.status = 'cancelled'`,
+      [id]
+    );
+    if (rows.length === 0) {
+      await client.query('ROLLBACK');
+      return NextResponse.json({ error: 'Deze afspraak is niet (meer) terug te zetten.' }, { status: 404 });
+    }
+    const a = rows[0];
+    const { rows: conflicts } = await client.query(
+      `SELECT id FROM appointments
+       WHERE id != $3 AND status != 'cancelled' AND start_time < $2 AND end_time > $1
+       UNION ALL
+       SELECT id FROM blocked_slots WHERE start_time < $2 AND end_time > $1`,
+      [a.start_time, a.end_time, id]
+    );
+    if (conflicts.length > 0) {
+      await client.query('ROLLBACK');
+      return NextResponse.json(
+        { error: 'Op die tijd staat inmiddels iets anders. Plan de afspraak opnieuw in.' },
+        { status: 409 }
+      );
+    }
+    await client.query(`UPDATE appointments SET status = 'confirmed' WHERE id = $1`, [id]);
+    await client.query('COMMIT');
+    await logActivity('beheer', 'teruggezet', appointmentSummary(a.customer_name, a.treatment_name, a.start_time), id);
+    return NextResponse.json({ ok: true });
+  } catch (err) {
+    await client.query('ROLLBACK');
+    throw err;
+  } finally {
+    client.release();
+  }
+}
+
+/**
+ * Afspraak verwijderen. Hij wordt niet echt gewist maar als geannuleerd gemarkeerd,
+ * zodat hij in het logboek staat en terug te zetten is (na 6 maanden wordt hij alsnog gewist).
+ */
 export async function DELETE(request: NextRequest) {
   const blocked = guardAdmin(request);
   if (blocked) return blocked;
@@ -131,6 +181,14 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json({ error: 'Ongeldig ID' }, { status: 400 });
   }
   await ensureSchema();
-  await pool.query('DELETE FROM appointments WHERE id = $1', [id]);
+  const { rows } = await pool.query(
+    `UPDATE appointments a SET status = 'cancelled' FROM treatments t
+     WHERE a.id = $1 AND a.status != 'cancelled' AND t.id = a.treatment_id
+     RETURNING a.customer_name, a.start_time, t.name AS treatment_name`,
+    [id]
+  );
+  if (rows.length > 0) {
+    await logActivity('beheer', 'verwijderd', appointmentSummary(rows[0].customer_name, rows[0].treatment_name, rows[0].start_time), id);
+  }
   return NextResponse.json({ ok: true });
 }

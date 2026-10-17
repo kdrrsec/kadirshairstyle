@@ -57,6 +57,17 @@ export function ensureSchema() {
         CREATE INDEX IF NOT EXISTS appointments_phone_e164_idx ON appointments (phone_e164);
         CREATE INDEX IF NOT EXISTS appointments_ip_hash_idx ON appointments (ip_hash, created_at);
 
+        -- Logboek: elke wijziging in de agenda (zie lib/activity.ts).
+        CREATE TABLE IF NOT EXISTS activity_log (
+          id SERIAL PRIMARY KEY,
+          created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+          source TEXT NOT NULL,
+          action TEXT NOT NULL,
+          appointment_id INT,
+          summary TEXT NOT NULL
+        );
+        CREATE INDEX IF NOT EXISTS activity_log_created_idx ON activity_log (created_at DESC);
+
         CREATE TABLE IF NOT EXISTS booking_attempts (
           id SERIAL PRIMARY KEY,
           ip_hash TEXT NOT NULL,

@@ -6,6 +6,7 @@ import { pool, ensureSchema } from '@/lib/db';
 import { treatments as siteTreatments } from '@/content/site';
 import { computeAvailableSlots, dayBoundsUTC, hoursForDate, localToUTC, toAmsterdamParts } from '@/lib/schedule';
 import { normalizePhone } from '@/lib/phone';
+import { appointmentSummary, logActivity } from '@/lib/activity';
 import { HELP_TEXT, addDaysISO, parseCommand, type Command, type TreatmentRef } from '@/lib/whatsapp-parse';
 
 const MAX_BLOCK_DAYS = 62;
@@ -139,6 +140,7 @@ async function book(cmd: Extract<Command, { kind: 'book' }>, treatments: DbTreat
       [treatment.id, cmd.name, phone, start.toISOString(), end.toISOString(), phoneE164]
     );
     await client.query('COMMIT');
+    await logActivity('whatsapp', 'nieuw', appointmentSummary(cmd.name, treatment.name, start), rows[0].id);
 
     const hours = hoursForDate(cmd.date);
     const outside = !hours || cmd.time < hours.open || hm(end) > hours.close;
@@ -262,6 +264,7 @@ async function block(cmd: Extract<Command, { kind: 'block' }>) {
     days.length === 1
       ? `${longDate(cmd.from)}${cmd.startTime ? ` ${cmd.startTime}–${cmd.endTime}` : ' (hele dag)'}`
       : `${longDate(cmd.from)} t/m ${longDate(cmd.to).toLowerCase()}${cmd.startTime ? `, elke dag ${cmd.startTime}–${cmd.endTime}` : ''}`;
+  await logActivity('whatsapp', 'geblokkeerd', `${when}${cmd.reason ? ` (${cmd.reason})` : ''}`);
   const lines = [`⛔ *Geblokkeerd:* ${when}`, 'Online boeken kan dan niet meer.'];
   if (inBlock.length) {
     lines.push('', `Let op, er staan nog ${inBlock.length} ${inBlock.length === 1 ? 'afspraak' : 'afspraken'}:`);
@@ -284,6 +287,7 @@ async function unblock(cmd: Extract<Command, { kind: 'unblock' }>) {
     end.toISOString(),
   ]);
   const when = cmd.from === cmd.to ? longDate(cmd.from) : `${longDate(cmd.from)} t/m ${longDate(cmd.to).toLowerCase()}`;
+  if (rowCount) await logActivity('whatsapp', 'vrijgegeven', when);
   return rowCount ? `✅ *Weer open:* ${when}\nOnline boeken kan weer.` : `Er was niets geblokkeerd op ${when.toLowerCase()}.`;
 }
 
@@ -296,6 +300,7 @@ async function cancel(id: number) {
   );
   if (rows.length === 0) return `⚠️ Afspraak #${id} niet gevonden (of al geannuleerd).`;
   const a = rows[0];
+  await logActivity('whatsapp', 'geannuleerd', appointmentSummary(a.customer_name, a.treatment, a.start_time), id);
   const p = toAmsterdamParts(new Date(a.start_time));
   return [
     `🗑️ *Geannuleerd* #${id}`,

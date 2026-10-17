@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { CalendarClock, LogOut, MessageCircle, Monitor, Phone, RefreshCw, Trash2, X } from 'lucide-react';
+import { CalendarClock, History, LogOut, MessageCircle, Monitor, Phone, RefreshCw, Trash2, X } from 'lucide-react';
 import logoLight from '@/public/logo-compact-light.png';
 
 type Appointment = {
@@ -69,6 +69,7 @@ export function AdminDashboard() {
   const [toast, setToast] = useState('');
   const [rescheduling, setRescheduling] = useState<Appointment | null>(null);
   const [deleting, setDeleting] = useState<Appointment | null>(null);
+  const [showLog, setShowLog] = useState(false);
 
   const load = useCallback(async () => {
     setLoadError('');
@@ -160,6 +161,10 @@ export function AdminDashboard() {
             >
               <MessageCircle size={16} strokeWidth={1.7} aria-hidden="true" />
               <span>{sendingOverview ? 'Versturen…' : 'Dagoverzicht'}</span>
+            </button>
+            <button type="button" className="adm-top-link" onClick={() => setShowLog(true)} title="Alle wijzigingen in de agenda">
+              <History size={16} strokeWidth={1.7} aria-hidden="true" />
+              <span>Logboek</span>
             </button>
             <a href="/" className="adm-top-link">
               Website
@@ -285,6 +290,17 @@ export function AdminDashboard() {
         />
       )}
 
+      {showLog && (
+        <Dialog title="Logboek" onClose={() => setShowLog(false)}>
+          <ActivityLog
+            onRestored={(msg) => {
+              setToast(msg);
+              load();
+            }}
+          />
+        </Dialog>
+      )}
+
       {deleting && (
         <Dialog title="Afspraak verwijderen?" onClose={() => setDeleting(null)}>
           <DeleteBody
@@ -334,6 +350,118 @@ function Dialog({ title, onClose, children }: { title: string; onClose: () => vo
   );
 }
 
+type LogEntry = {
+  id: number;
+  at: string;
+  source: 'website' | 'beheer' | 'whatsapp';
+  action: string;
+  appointmentId: number | null;
+  summary: string;
+  restorable: boolean;
+};
+
+const SOURCE_LABEL: Record<LogEntry['source'], string> = {
+  website: 'Website',
+  beheer: 'Beheer',
+  whatsapp: 'WhatsApp',
+};
+
+const ACTION_LABEL: Record<string, string> = {
+  nieuw: 'Nieuwe afspraak',
+  verzet: 'Verzet',
+  verwijderd: 'Verwijderd',
+  geannuleerd: 'Geannuleerd',
+  teruggezet: 'Teruggezet',
+  geblokkeerd: 'Geblokkeerd',
+  vrijgegeven: 'Weer open',
+};
+
+function logTime(iso: string) {
+  return new Intl.DateTimeFormat('nl-NL', {
+    timeZone: 'Europe/Amsterdam',
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
+  })
+    .format(new Date(iso))
+    .replace(/\./g, '');
+}
+
+function ActivityLog({ onRestored }: { onRestored: (msg: string) => void }) {
+  const [entries, setEntries] = useState<LogEntry[] | null>(null);
+  const [error, setError] = useState('');
+  const [busyId, setBusyId] = useState<number | null>(null);
+
+  const load = useCallback(async () => {
+    setError('');
+    try {
+      const res = await fetch('/api/admin/logboek', { cache: 'no-store' });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Logboek kon niet worden geladen.');
+      setEntries(data.entries || []);
+    } catch (e) {
+      setError((e as Error).message);
+    }
+  }, []);
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  async function restore(entry: LogEntry) {
+    if (!entry.appointmentId) return;
+    setBusyId(entry.id);
+    setError('');
+    const res = await fetch('/api/admin/appointments', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: entry.appointmentId, restore: true }),
+    });
+    const data = await res.json().catch(() => ({}));
+    setBusyId(null);
+    if (!res.ok) {
+      setError(data.error || 'Terugzetten is niet gelukt.');
+      return;
+    }
+    onRestored('Afspraak teruggezet');
+    load();
+  }
+
+  if (error && !entries) return <p className="adm-error">{error}</p>;
+  if (!entries) return <p className="adm-muted">Laden…</p>;
+  if (entries.length === 0) return <p className="adm-muted">Nog geen wijzigingen vastgelegd.</p>;
+
+  return (
+    <>
+      {error && <p className="adm-error">{error}</p>}
+      <ol className="adm-log">
+        {entries.map((e) => (
+          <li key={e.id} className={`adm-log-item adm-log-${e.action}`}>
+            <div className="adm-log-meta">
+              <span className="adm-log-time">{logTime(e.at)}</span>
+              <span className={`adm-log-source src-${e.source}`}>{SOURCE_LABEL[e.source] ?? e.source}</span>
+            </div>
+            <p className="adm-log-text">
+              <strong>{ACTION_LABEL[e.action] ?? e.action}</strong>
+              {e.appointmentId ? <span className="adm-log-id"> #{e.appointmentId}</span> : null}
+              <br />
+              {e.summary}
+            </p>
+            {e.restorable && (
+              <button type="button" className="adm-action" onClick={() => restore(e)} disabled={busyId === e.id}>
+                {busyId === e.id ? 'Bezig…' : 'Terugzetten'}
+              </button>
+            )}
+          </li>
+        ))}
+      </ol>
+      <p className="adm-muted adm-log-note">Het logboek bewaart wijzigingen 6 maanden.</p>
+    </>
+  );
+}
+
 function Summary({ a }: { a: Appointment }) {
   return (
     <div className="adm-summary">
@@ -374,8 +502,8 @@ function DeleteBody({
     <>
       <Summary a={appointment} />
       <p className="adm-muted">
-        De afspraak wordt definitief verwijderd en de tijd komt weer vrij voor online boekingen. Laat de klant het even
-        weten.
+        De tijd komt weer vrij voor online boekingen. Laat de klant het even weten. Per ongeluk verwijderd? Via het
+        Logboek zet je hem terug.
       </p>
       {error && <p className="adm-error">{error}</p>}
       <div className="adm-dialog-foot">

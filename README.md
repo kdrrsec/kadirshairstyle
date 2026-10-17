@@ -85,6 +85,14 @@ Sleutel kwijt? Stuur `SLEUTEL`. Nieuwe sleutel nodig? Stuur `NIEUWE SLEUTEL` (en
 
 Zonder deze variabelen gebeurt er niets. Lukt een melding een keer niet, dan gaat de boeking gewoon door.
 
+## Logboek (beheer)
+
+Elke wijziging in de agenda komt in het **Logboek** in het beheer: nieuwe afspraken
+(website, beheer of WhatsApp), verzetten, verwijderen/annuleren, terugzetten en
+blokkeren. Verwijderen in het beheer wist een afspraak niet echt maar markeert hem
+als geannuleerd; via het Logboek is hij terug te zetten zolang de tijd vrij is.
+Logboekregels en afspraken worden na 6 maanden gewist (`lib/activity.ts`, `lib/retention.ts`).
+
 ## Agenda beheren via WhatsApp
 
 De kapper kan zijn agenda ook regelen door een WhatsApp te sturen naar het AxaWeb-afzendnummer:

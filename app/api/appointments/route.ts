@@ -1,4 +1,5 @@
 import { NextResponse, after } from 'next/server';
+import { appointmentSummary, logActivity } from '@/lib/activity';
 import { pool, ensureSchema } from '@/lib/db';
 import { isBookableTime, localToUTC } from '@/lib/schedule';
 import { DATE_RE, TIME_RE, databaseUnavailable } from '@/lib/api';
@@ -150,11 +151,15 @@ export async function POST(request: Request) {
     );
     await client.query('COMMIT');
 
+    const appointmentId: number = rows[0].id;
     after(() =>
-      notifyBarber({ name: cleanName, phone: phoneCheck.display, treatment: treatmentRows[0].name, date, time })
+      Promise.all([
+        notifyBarber({ name: cleanName, phone: phoneCheck.display, treatment: treatmentRows[0].name, date, time }),
+        logActivity('website', 'nieuw', appointmentSummary(cleanName, treatmentRows[0].name, start), appointmentId),
+      ])
     );
 
-    return NextResponse.json({ id: rows[0].id });
+    return NextResponse.json({ id: appointmentId });
   } catch (err) {
     await client.query('ROLLBACK');
     throw err;

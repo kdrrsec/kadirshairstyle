@@ -1365,6 +1365,42 @@ h2.center { text-align: center; max-width: 640px; margin-left: auto; margin-righ
   border-radius: 14px;
   box-shadow: 0 24px 60px rgba(18,18,20,0.25);
 }
+/* Logboek */
+.adm-log { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.adm-log-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: 'meta action' 'text action';
+  align-items: center;
+  column-gap: 12px;
+  row-gap: 4px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--ivory-dark);
+  border-left: 3px solid rgba(27, 28, 30, 0.15);
+}
+.adm-log-item .adm-action { grid-area: action; }
+.adm-log-meta { grid-area: meta; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.adm-log-time { font-size: 0.76rem; color: var(--text-soft); }
+.adm-log-source {
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(27, 28, 30, 0.08);
+  color: var(--ink);
+}
+.adm-log-source.src-whatsapp { background: rgba(37, 211, 102, 0.16); }
+.adm-log-source.src-website { background: rgba(138, 115, 92, 0.16); }
+.adm-log-text { grid-area: text; margin: 0; font-size: 0.86rem; line-height: 1.45; color: var(--text-soft); }
+.adm-log-text strong { color: var(--ink); }
+.adm-log-id { color: var(--text-soft); font-size: 0.8rem; }
+.adm-log-nieuw, .adm-log-teruggezet { border-left-color: #4f8a5b; }
+.adm-log-verwijderd, .adm-log-geannuleerd { border-left-color: #9a3b2e; }
+.adm-log-verzet { border-left-color: var(--accent); }
+.adm-log-note { margin-top: 14px; font-size: 0.78rem; }
 .adm-dialog-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
 .adm-dialog-head h2 { font-size: 1.45rem; margin: 0; }
 .adm-summary {
