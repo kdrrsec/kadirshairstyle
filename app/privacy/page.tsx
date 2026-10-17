@@ -68,32 +68,20 @@ export default function PrivacyPage() {
             gebeurd. Wil je dat je gegevens eerder worden gewist? Laat het ons weten, dan doen we dat.
           </p>
 
-          <h2>Wie verwerkt je gegevens voor ons?</h2>
-          <p>We werken met een paar zorgvuldig gekozen partijen, die je gegevens alleen voor ons verwerken:</p>
+          <h2>Derde partijen</h2>
+          <p>
+            Voor de website en het afsprakensysteem werken we met een aantal zorgvuldig gekozen derde partijen. Zij
+            verwerken je gegevens alleen in onze opdracht en alleen voor het doel waarvoor wij ze inschakelen:
+          </p>
           <ul>
-            <li>
-              <strong>AxaWeb</strong> heeft de website gebouwd en beheert die, inclusief een eigen server die de kapper
-              via WhatsApp laat weten dat je een afspraak hebt gemaakt.
-            </li>
-            <li>
-              <strong>Vercel</strong> host de website. De website draait in Frankfurt (Duitsland).
-            </li>
-            <li>
-              <strong>Neon</strong> bewaart de afsprakendatabase in Frankfurt (Duitsland).
-            </li>
-            <li>
-              <strong>Cloudflare Turnstile</strong> controleert bij het boeken of je geen robot bent. Daarvoor worden
-              geen trackingcookies gebruikt.
-            </li>
-            <li>
-              <strong>WhatsApp (Meta)</strong>: de kapper ontvangt je naam, telefoonnummer en afspraak als
-              WhatsApp-bericht.
-            </li>
+            <li>het bouwen, beheren en hosten van de website;</li>
+            <li>het veilig opslaan van de afspraken, op servers binnen de Europese Unie;</li>
+            <li>de controle bij het boeken of je geen robot bent, zonder trackingcookies;</li>
+            <li>het doorsturen van je afspraak (naam, telefoonnummer, dienst en tijd) naar de kapper via WhatsApp.</li>
           </ul>
           <p>
-            Een aantal van deze bedrijven is (ook) in de Verenigde Staten gevestigd. Doorgifte buiten de EU gebeurt
-            alleen met de waarborgen die de AVG daarvoor eist, zoals het EU-VS-privacykader of
-            modelcontractbepalingen.
+            We verkopen je gegevens nooit en delen ze niet voor andere doeleinden. Komen gegevens toch buiten de EU
+            terecht, dan gebeurt dat alleen met de waarborgen die de AVG daarvoor eist.
           </p>
 
           <h2>Cookies en kaart</h2>
